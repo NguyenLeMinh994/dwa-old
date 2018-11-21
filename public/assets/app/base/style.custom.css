@@ -1,0 +1,82 @@
+.m-header--minimize-on .m-brand .m-brand__logo .m-brand__logo-wrapper img {
+    max-height: 60px;
+    -webkit-transition: all 0.3s ease 0.3s;
+    transition: all 0.3s ease 0.3s;
+}
+
+.m-brand .m-brand__tools .m-dropdown .btn {
+    border-color: #f7f7fb;
+    color: #9099b1;
+    background: #f7f7fb;
+    padding: 0.9rem 1.5rem 0.9rem 1.5rem;
+}
+
+.m-topbar .m-topbar__nav.m-nav>.m-nav__item.m-topbar__user-profile>.m-nav__link .m-topbar__welcome {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #b1b5c1;
+}
+
+.m-topbar .m-topbar__nav.m-nav>.m-nav__item.m-topbar__user-profile>.m-nav__link .m-topbar__username {
+    display: table-cell;
+    vertical-align: middle;
+    text-transform: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    color: #f1b309;
+    padding-right: 10px;
+}
+
+.m-input--dwa {
+    background-color: #b6c7f561;
+}
+
+.amcharts-export-menu, .amcharts-export-menu-top-right, .amExportButton.active {
+    display:none
+}
+
+.suggest_loading_spinner {    
+    background-color: #ffffff;
+    background-image: url("/assets/app/media/img/wait.gif");
+    background-size: 25px 25px;
+    background-position:right center;
+    background-repeat: no-repeat;
+ }
+
+/** Alert Portlet **/
+.azure-alert{
+    background-color:#ebedf2;
+    border-color:#ebedf2"
+}
+
+.azure-alert-text{
+    font-size:13px;
+    font-weight:400;
+}
+
+@media (min-width: 1025px){
+    .m-stack.m-stack--desktop.m-stack--ver>.m-stack__item {
+        width: 530px;
+    }
+    .m-stack.m-stack--desktop.m-stack--ver>.m-stack__item.m-stack__item--right {
+        width: 50%;
+    }
+
+    .m-header .m-header__bottom {
+        padding: 0;
+        position: relative;
+        z-index: 2;
+        height: auto;
+    }
+
+    .m-header-menu .m-menu__nav>.m-menu__item.m-menu__item--tabs>.m-menu__link .m-menu__link-text {
+        font-family: Asap Condensed;
+        font-weight: 500;
+        font-size: 1.15rem;
+        color: #757893;
+        text-transform: uppercase;
+    }
+}

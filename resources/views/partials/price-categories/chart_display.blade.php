@@ -158,6 +158,10 @@
     if ('{!!$currency_code!!}' == 'GBP'){
         currency_symbol = '£';
     }
+    if ('{!!$currency_code!!}' == 'DKK'){
+        currency_symbol = 'kr. ';
+    }
+    
     let chart_Dv3_data = {!! $json_Dv3_data !!};
     
     let chartDv3Label = [{

@@ -76,7 +76,6 @@ VM Categories
                                         $price = $cost * $totalHoursPerMonth;
                                         $gbRam_Price = $price / (float)$cat->RAM;
                                         //{{$cost}}
-                                    
                                     ?>
                                         
                                 </th>

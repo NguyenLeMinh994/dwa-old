@@ -9,14 +9,27 @@ class Valuta extends Model
 {
     protected $table = 'currencies_rates';
     protected $primaryKey = 'id';
+    protected $fillable = [
+        'id', 
+        'currency_code',
+        'currency_symbol', 
+        'currency_name', 
+        'rate',
+        'status',
+        'created_at',
+        'updated_at'
+    ];
 
     public function changeCurrentRate($currencyCode)
     {
         $currencyRate = DB::table('currencies_rates')
                             ->where('currency_code', $currencyCode)
-                            ->where('status', 'ACTIVED')
+                            //->where('status', 'ACTIVED')
                             ->get();
         //dd($currencyRate);
-        return $currencyRate[0]->rate;
+        if(isset($currencyRate[0]->rate))
+            return $currencyRate[0]->rate;
+        else
+            abort(406, 'Sorry, customer currency '.$currencyCode.' is not supported. Please go back to portal to recheck again');
     }
 }

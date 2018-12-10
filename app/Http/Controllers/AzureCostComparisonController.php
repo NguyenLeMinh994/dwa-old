@@ -472,10 +472,13 @@ class AzureCostComparisonController extends Controller
         $customer_setup_config = session('customer_setup_config');
         $this->region = $customer_setup_config['azure_locale'];
 
+        $this->currency_rate    = $customer_setup_config['currency']['currency_rate'];
+        $this->currency_code    = $customer_setup_config['currency']['currency_code'];
+
         $params_request = $request->all();
         $uid = $params_request['uid'];
         
-        $adjust_custom_price = $params_request['adjust_custom_price'];
+        $adjust_custom_price = $params_request['adjust_custom_price'] / $this->currency_rate;
        
         if($uid == $this->survey_info['case_id']){
             $update_st = dwa_pricing_variables_input::where(['pricing_variables' => 'adjust_custom_price', 'uid' => $uid])

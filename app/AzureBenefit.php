@@ -32,14 +32,14 @@ class AzureBenefit extends Model
         $potential_vms_available_switching_on_off = $dwaCalculation->Potential_of_VMs_available_for_switching_on_off_benefits($survey_info);
         
         $calculated_potential_of_switching_on_off = $potential_vms_available_switching_on_off['percentages_available_for_switching_on_off'];
-        $adjusted_reduction_advantage_of_switching_on_off_VMs = 0;
+        $adjusted_reduction_advantage_of_switching_on_off_vms = $calculated_potential_of_switching_on_off / 2;
         
         foreach($trimming_benefits as $item){
 
             // if($item->name == 'calculated_potential_of_switching_on_off')
             //     $calculated_potential_of_switching_on_off = $item->value;
 
-            if($item->name == 'adjusted_reduction_advantage_of_switching_on_off_vms')
+            if($item->name == 'adjusted_reduction_advantage_of_switching_on_off_vms' && $item->value != null)
                 $adjusted_reduction_advantage_of_switching_on_off_vms = $item->value;
         }
 

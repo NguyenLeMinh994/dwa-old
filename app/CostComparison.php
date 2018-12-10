@@ -81,11 +81,11 @@ class CostComparison extends Model
                             + $high_perfomance
                             + $gpu_vm;
 
-        $percentage_GP_with_total_vm = $general_purpose / $total_vm_costs; 
-        $percentage_MO_with_total_vm = $memory_optimised / $total_vm_costs;
-        $percentage_compute_optimised_with_total_vm = $compute_optimised / $total_vm_costs;
-        $percentage_high_performance_with_total_vm = $high_perfomance / $total_vm_costs;
-        $percentage_gpu_with_total_vm = $gpu_vm / $total_vm_costs;
+        $percentage_GP_with_total_vm                = ($general_purpose > 0)    ? ($general_purpose / $total_vm_costs)  : 0; 
+        $percentage_MO_with_total_vm                = ($memory_optimised > 0)   ? ($memory_optimised / $total_vm_costs) : 0;
+        $percentage_compute_optimised_with_total_vm = ($compute_optimised > 0)  ? $compute_optimised / $total_vm_costs  : 0;
+        $percentage_high_performance_with_total_vm  = ($high_perfomance > 0)    ? $high_perfomance / $total_vm_costs    : 0;
+        $percentage_gpu_with_total_vm               = ($gpu_vm > 0)             ? $gpu_vm / $total_vm_costs             : 0;
 
         //return data
         $cost_comparison = array();

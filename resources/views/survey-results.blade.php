@@ -21,7 +21,7 @@ Questionnaire
 
             let body = 'Dear customer,%0D%0A';
             body += 'I have re-opened the Questionnaire for this case, kindly use the same login credentials to update the questionnaire. Please focus on the following questions:';
-            body += '%0D%0A%0D%0A%0D%0A(build some space above and closing so case-handler can see they need to input their questions/comments.)%0D%0A%0D%0A%0D%0A';
+            body += '%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A';
             body += 'Kind regards,%0D%0A'+caseHandlerName;
             
             function confirmSendMail(){
@@ -202,7 +202,10 @@ Questionnaire
                                                             if(in_array($record->uid, $cost_field))
                                                                 echo $customer_currency_code.' '.number_format($record->answer * $customer_currency_rate, 0, '.', ',');    
                                                             else {
-                                                                echo number_format($record->answer, 0, '.', ',');    
+                                                                if($record->uid == 'INFRA_FTE')
+                                                                    echo number_format($record->answer, 1, '.', ',');
+                                                                else
+                                                                    echo number_format($record->answer, 0, '.', ',');
                                                             }
                                                         }
                                                     }

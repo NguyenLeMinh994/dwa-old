@@ -106,19 +106,19 @@ class CurrentCostStructureController extends Controller
             $chart14[] = array('customer_cost'=>"WinOS & HypVisor licenses", 'value'=>((float)$costComparison['winos_hypvisor_licenses']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#2f4074');
         
         if((float)$costComparison['gpu_VMs']['monthly_infrastructure_related_costs'] > 0)
-            $chart14[] = array('customer_cost'=>"GPU VM's", 'value'=>((float)$costComparison['gpu_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#84b761');
+            $chart14[] = array('customer_cost'=>"GPU VMs", 'value'=>((float)$costComparison['gpu_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#84b761');
         
         if((float)$costComparison['high_performance_VMs']['monthly_infrastructure_related_costs'] > 0)
-            $chart14[] = array('customer_cost'=>"High Performance VM's", 'value'=>((float)$costComparison['high_performance_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#cc4748');
+            $chart14[] = array('customer_cost'=>"High Performance VMs", 'value'=>((float)$costComparison['high_performance_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#cc4748');
         
         if((float)$costComparison['compute_optimised_VMs']['monthly_infrastructure_related_costs'] > 0)
-            $chart14[] = array('customer_cost'=>"Compute Optimised VM's", 'value'=>((float)$costComparison['compute_optimised_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#cd82ad');
+            $chart14[] = array('customer_cost'=>"Compute Optimised VMs", 'value'=>((float)$costComparison['compute_optimised_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#cd82ad');
         
         if((float)$costComparison['memory_optimised_VMs']['monthly_infrastructure_related_costs'] > 0)
-            $chart14[] = array('customer_cost'=>"Memory Optimised VM's", 'value'=>((float)$costComparison['memory_optimised_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#fdd400');
+            $chart14[] = array('customer_cost'=>"Memory Optimised VMs", 'value'=>((float)$costComparison['memory_optimised_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#fdd400');
         
         if((float)$costComparison['general_purpose_VMs']['monthly_infrastructure_related_costs'] > 0)
-            $chart14[] = array('customer_cost'=>"General Purpose VM's", 'value'=>((float)$costComparison['general_purpose_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#67b6dc');
+            $chart14[] = array('customer_cost'=>"General Purpose VMs", 'value'=>((float)$costComparison['general_purpose_VMs']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#67b6dc');
         
         if((float)$costComparison['auxiliary_storage']['monthly_infrastructure_related_costs'] > 0)
             $chart14[] = array('customer_cost'=>'Auxiliary Storage', 'value'=>((float)$costComparison['auxiliary_storage']['monthly_infrastructure_related_costs']*$this->currency_rate), 'color'=>'#b7b83f');

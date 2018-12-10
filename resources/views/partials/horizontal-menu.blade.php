@@ -121,6 +121,40 @@
     </button>
     <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light">
         <ul class="m-menu__nav m-menu__nav--submenu-arrow ">
+            <li id="region-mobile" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown" m-menu-submenu-toggle="click" aria-haspopup="true">
+                <a href="javascript: void(0)" class="m-menu__link m-menu__toggle">
+                    <i class="m-menu__link-icon flaticon-placeholder"></i>
+                    <span class="m-menu__link-text">Azure Region: {{$current_region}}</span>
+                    <i class="m-menu__hor-arrow la la-angle-down"></i>
+                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                </a>
+                <div class="m-menu__submenu m-menu__submenu--fixed m-menu__submenu--left" style="width:1000px">
+                    <?php $region_list = \Cache::get('regions_meter'); ?>
+                    <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 71.5px;"></span>
+                    <div class="m-menu__subnav">
+                        <ul class="m-menu__content">
+                            @foreach($region_list as $group_key => $group_list)
+                            <li class="m-menu__item">
+                                <h3 class="m-menu__heading m-menu__toggle">
+                                    <span class="m-menu__link-text">{{$group_key}}</span>
+                                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                </h3>
+                                <ul class="m-menu__inner">
+                                    @foreach($group_list as $region_key => $region_item)
+                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="javascript:confirmSwitch('Region', '{{$current_region}}', '{{$region_item->meter}}');" class="m-menu__link ">
+                                            <i class="m-menu__link-icon flaticon-placeholder-2"></i>
+                                            <span class="m-menu__link-text" style="text-align:left">{{$region_item->meter}}</span>
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </li>
             <li class="m-menu__item  m-menu__item--submenu {{$active_menu['customers']}} m-menu__item--tabs"  m-menu-submenu-toggle="tab" aria-haspopup="true">
                 <a href="/survey-results" class="m-menu__link">
                     <span class="m-menu__link-text">{{ trans('menu.validate') }}</span>
@@ -138,7 +172,7 @@
             </li>
 
             <li class="m-menu__item m-menu__item--submenu {{$active_menu['dashboard']}} m-menu__item--tabs" m-menu-submenu-toggle="tab" aria-haspopup="true">
-                <a href="#" class="m-menu__link">
+                <a href="/azure-cost-comparison" class="m-menu__link">
                     <span class="m-menu__link-text">{{ trans('menu.azure') }}</span>
                     <i class="m-menu__hor-arrow la la-angle-down"></i>
                     <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -146,7 +180,7 @@
             </li>
 
             <li class="m-menu__item  m-menu__item--submenu {{$active_menu['benefit']}} m-menu__item--tabs"  m-menu-submenu-toggle="tab" aria-haspopup="true">
-                <a  href="#" class="m-menu__link">
+                <a  href="/azure-benefits" class="m-menu__link">
                     <span class="m-menu__link-text">{{ trans('menu.benefit') }}</span>
                     <i class="m-menu__hor-arrow la la-angle-down"></i>
                     <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -162,7 +196,7 @@
             </li>    
 
             <li class="m-menu__item  m-menu__item--submenu {{$active_menu['business_case']}} m-menu__item--tabs" m-menu-submenu-toggle="tab" aria-haspopup="true">
-                <a  href="#" class="m-menu__link">
+                <a  href="/business-case" class="m-menu__link">
                     <span class="m-menu__link-text">{{ trans('menu.scenarios') }}</span>
                     <i class="m-menu__hor-arrow la la-angle-down"></i>
                     <i class="m-menu__ver-arrow la la-angle-right"></i>
@@ -177,21 +211,24 @@
                 </a>
             </li>
             
-            
+            <?php
+            $customer_setup_config = session('customer_setup_config');
+            if($customer_setup_config['userRole'] == 'admin'){
+            ?>
             <script>
                 function openSubMenu(menuID){
-                    let subMenus = ["scenarioSub", "comparisonSub", "RISub", "StaticSub"];
-                    if($("#"+menuID).hasClass("m-menu__item--hover") == false)
-                        $("#"+menuID).addClass("m-menu__item--open-dropdown m-menu__item--hover");
-                    else
-                        $("#"+menuID).removeClass("m-menu__item--open-dropdown m-menu__item--hover");
+                    // let subMenus = ["scenarioSub", "comparisonSub", "RISub", "StaticSub"];
+                    // if($("#"+menuID).hasClass("m-menu__item--hover") == false)
+                    //     $("#"+menuID).addClass("m-menu__item--open-dropdown m-menu__item--hover");
+                    // else
+                    //     $("#"+menuID).removeClass("m-menu__item--open-dropdown m-menu__item--hover");
 
-                    //close other sub menu
-                    $.each(subMenus, function (index, value) {
-                        if(value != menuID){
-                            $("#"+value).removeClass("m-menu__item--open-dropdown m-menu__item--hover");
-                        }
-                    });
+                    // //close other sub menu
+                    // $.each(subMenus, function (index, value) {
+                    //     if(value != menuID){
+                    //         $("#"+value).removeClass("m-menu__item--open-dropdown m-menu__item--hover");
+                    //     }
+                    // });
                 }
             </script>
             <li class="m-menu__item {{$active_menu['admin_tools']}} m-menu__item--submenu m-menu__item--tabs"  m-menu-submenu-toggle="tab" aria-haspopup="true">
@@ -228,6 +265,92 @@
                                             <i class="m-menu__link-icon flaticon-graphic-2"></i>
                                             <span class="m-menu__link-text">
                                                 Cost Comparison
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="m-menu__item" m-menu-link-redirect="1" aria-haspopup="true">
+                            <a href="/variable-comparison" class="m-menu__link ">
+                                <i class="m-menu__link-icon flaticon-settings-1"></i>
+                                <span class="m-menu__link-text">
+                                    Calculations
+                                </span>
+                            </a>
+                        </li>
+                        
+                        <li id="scenarioSub" onclick="openSubMenu('scenarioSub')" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--submenu-tabs" m-menu-link-redirect="1" aria-haspopup="true"  m-menu-submenu-toggle="click">
+                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                <i class="m-menu__link-icon fa fa-chart-line"></i>
+                                <span class="m-menu__link-text">
+                                    Scenarios Calculation
+                                </span>
+                                <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 71.5px;"></span>
+                                <ul class="m-menu__subnav">
+                                    <li class="m-menu__item " aria-haspopup="true">
+                                        <a href="/scenario1-calculation" class="m-menu__link ">
+                                            <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-menu__link-text">Scenario 1</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " aria-haspopup="true">
+                                        <a href="/scenario2-calculation" class="m-menu__link ">
+                                            <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-menu__link-text">Scenario 2</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " aria-haspopup="true">
+                                        <a href="/scenario3-calculation" class="m-menu__link ">
+                                            <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                            <span class="m-menu__link-title">
+                                                <span class="m-menu__link-wrap">
+                                                    <span class="m-menu__link-text">Scenario 3</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li id="RISub" onclick="openSubMenu('RISub')" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--submenu-tabs" m-menu-link-redirect="1" aria-haspopup="true"  m-menu-submenu-toggle="click">
+                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                <i class="m-menu__link-icon flaticon-settings-1"></i>
+                                <span class="m-menu__link-text">
+                                    Reserved Instances
+                                </span>
+                                <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 71.5px;"></span>
+                                <ul class="m-menu__subnav">
+                                    <li class="m-menu__item" m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="/reserved-instances" class="m-menu__link ">
+                                            <i class="m-menu__link-icon flaticon-settings-1"></i>
+                                            <span class="m-menu__link-text">
+                                                Reserved Instances
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item" m-menu-link-redirect="1" aria-haspopup="true">
+                                        <a href="/variable-stragetic" class="m-menu__link ">
+                                            <i class="m-menu__link-icon flaticon-settings-1"></i>
+                                            <span class="m-menu__link-text">
+                                                RI Discounts
                                             </span>
                                         </a>
                                     </li>
@@ -300,7 +423,9 @@
                     </ul>
                 </div>
             </li>
-            
+            <?php 
+            } 
+            ?>
             <!--    
             <li class="m-menu__item  m-menu__item--submenu m-menu__item--tabs"  m-menu-submenu-toggle="tab" aria-haspopup="true">
                 <a  href="#" class="m-menu__link m-menu__toggle">

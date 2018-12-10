@@ -16,7 +16,7 @@ class AzureQualityServices extends Model
         $quality_of_services['Service_Level_Agreement']['supplier'] = '';
 
         $quality_of_services['Uptime_guarantees_on_the_infrastructure']['customer'] = number_format($survey_info['SLA_UPTIME']->answer*100,2).'%';
-        $quality_of_services['Uptime_guarantees_on_the_infrastructure']['supplier'] = '99.99%';
+        $quality_of_services['Uptime_guarantees_on_the_infrastructure']['supplier'] = '99.95%';
 
         $quality_of_services['Max._service_credits_pay_out']['customer'] = number_format($survey_info['SLA_MAX_SERVICE_CREDIT_PAID']->answer*100,0).'%';
         $quality_of_services['Max._service_credits_pay_out']['supplier'] = '20%';
@@ -85,7 +85,7 @@ class AzureQualityServices extends Model
         $azure = array();
         $azure['quality_of_services_aspects']                   = 'AZURE';
 
-        $azure['uptime_guarantees_on_the_infrastructure']       = '0.9999';
+        $azure['uptime_guarantees_on_the_infrastructure']       = '0.9995';
         $azure['max_service_credits_pay_out']                   = '0.2';
         $azure['back_up_frequency_recovery_vault_per_24_hours'] = 'Up to 3';
         $azure['back_up_frequency_disk_per_14_hours']           = '15 minutes to one hour';

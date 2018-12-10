@@ -58,7 +58,6 @@ class HomeController extends Controller
                         else
                             $role = $userRole['roles'][0];
                     }
-
                 }
 
                 //generate default value for new customer
@@ -82,12 +81,14 @@ class HomeController extends Controller
                                                     'password'      => '123456'])) 
                 {
                     $customer_config = array();
-                    $customer_config['token'] = $token;
-                    $customer_config['azure_locale'] = trim($survey_info['CUSTOMER_TARGET_AZURE_PLATFORM']->answer);
+                    $customer_config['token']               = $token;
+                    $customer_config['azure_locale']        = trim($survey_info['CUSTOMER_TARGET_AZURE_PLATFORM']->answer);
                     
-                    $customer_config['userRole'] = $role;
-                    $customer_config['caseHandlerName'] = $caseHandler_Name;
-                    $customer_config['caseHandlerEmail'] = $caseHandler_Email;
+                    $customer_config['userRole']            = $role;
+                    $customer_config['caseHandlerName']     = $caseHandler_Name;
+                    $customer_config['caseHandlerEmail']    = $caseHandler_Email;
+                    
+                    $customer_config['customerName']        = $survey_info['CUSTOMER_NAME']->answer;
                     
 					$customer_config['currency']['currency_code'] = trim($survey_info['CUSTOMER_CURRENCY']->answer);
                     $valuta = new Valuta();
@@ -180,16 +181,17 @@ class HomeController extends Controller
             if ($customer_currency != 'USD')
                 $currency_rate = $valuta_model->changeCurrentRate($customer_currency);
             
+            
             $survey_info = array();
             $survey_info['case_id'] = $guid;
             foreach($result['answers'] as $item)
             {
                 $survey_info[$item['uid']] = new \stdClass();
                 $survey_info[$item['uid']]->id              = $item['id'];
-
+    
                 $survey_info[$item['uid']]->section_uid     = $item['section_uid'];
                 $survey_info[$item['uid']]->section_title   = $item['section_title'];
-
+    
                 $survey_info[$item['uid']]->uid             = $item['uid'];
                 $survey_info[$item['uid']]->title           = $item['title'];
                 //convert all primary cost in survey to USD
@@ -203,7 +205,7 @@ class HomeController extends Controller
                 $survey_info[$item['uid']]->cpu_rating      = (isset($item['cpu_rating']))?$item['cpu_rating']:null;
                 $survey_info[$item['uid']]->cpu_released    = (isset($item['cpu_released']))?$item['cpu_released']:null;
             }
-
+    
             //create survey cache
             \Cache::put('survey-info_'.$guid, $survey_info, 30);
             return $survey_info;

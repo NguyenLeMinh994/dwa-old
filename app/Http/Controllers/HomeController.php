@@ -76,8 +76,8 @@ class HomeController extends Controller
                 // Attempt login
                 if (Auth::guard('web')->attempt([   //'email'         => $survey_info['RESELLER_CONTACT_PERSON_EMAIL']->answer, 
                                                     'guid'          => $guid,
-                                                    'azure_region'  => $survey_info['CUSTOMER_TARGET_AZURE_PLATFORM']->answer,
-                                                    'currency_code' => $survey_info['CUSTOMER_CURRENCY']->answer,
+                                                    //'azure_region'  => $survey_info['CUSTOMER_TARGET_AZURE_PLATFORM']->answer,
+                                                    //'currency_code' => $survey_info['CUSTOMER_CURRENCY']->answer,
                                                     'password'      => '123456'])) 
                 {
                     $customer_config = array();

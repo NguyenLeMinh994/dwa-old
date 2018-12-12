@@ -213,7 +213,7 @@
             
             <?php
             $customer_setup_config = session('customer_setup_config');
-            if($customer_setup_config['userRole'] == 'admin'){
+            //if($customer_setup_config['userRole'] == 'admin'){
             ?>
             <script>
                 function openSubMenu(menuID){
@@ -424,7 +424,7 @@
                 </div>
             </li>
             <?php 
-            } 
+            //}
             ?>
             <!--    
             <li class="m-menu__item  m-menu__item--submenu m-menu__item--tabs"  m-menu-submenu-toggle="tab" aria-haspopup="true">

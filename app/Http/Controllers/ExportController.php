@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +28,9 @@ class ExportController extends Controller
     protected $region;
     protected $currency_rate;
 
-    public function __construct(){}
+    public function __construct(){
+
+    }
 
     public function index() 
     {
@@ -77,14 +78,13 @@ class ExportController extends Controller
             {
                 case "viability-study-doc-export":
                     $word_template_name = "TEMPLATE_ViabilityStudy_AUG18_v21.docx";
-                    $output_file_name ="ViabilityStudy_CloudLab_EngVer_".date('dMY').".docx";
+                    $output_file_name ="ViabilityStudy_EngVer_".date('dMY').".docx";
                     break;
                 case "customer-proposal-doc-export":
                     $word_template_name = "TEMPLATE_End-Customer_Proposal_CloudLab_AUG18_v21.docx";
-                    $output_file_name ="End-Customer_Proposal_CloudLab_EngVer_".date('dMY').".docx";
+                    $output_file_name ="End-Customer_Proposal_EngVer_".date('dMY').".docx";
                     break;
             }
-            //dd($survey_info);
 
             //!-- Begin of Word Variables --!
             $word_data = array();
@@ -506,9 +506,6 @@ class ExportController extends Controller
             $word_table_data = array();
             $word_table_data['SpreadOfGPMOCompute'] = $table_spread_of_GP_MO;
             $word_table_data['AllocationOfRI']      = $table_allocation;
-
-            //dd($table_allocation);
-
             $phpword_Object->generateWordFile($word_template_name, $word_data, $word_image, $word_table_data, $output_file_name);
         }
         else
@@ -544,7 +541,7 @@ class ExportController extends Controller
             $currency_rate = $this->currency_rate;
 
             $word_template_name = "TEMPLATE_Bid-Evalaution_AUG18_V1.docx";
-            $output_file_name = "Bid-Evalaution_EngVer_".date('dMY').".docx";
+            $output_file_name = "Bid-Evaluation_EngVer_".date('dMY').".docx";
            
             //dd($survey_info);
 
@@ -642,11 +639,11 @@ class ExportController extends Controller
         switch($ppt_template){
             case 'workshop-ppt-export':
                 $template     = "WORKSHOP";
-                $output_file_name = "Workshop_Deck_CloudLab_EngVer_".date('dMY')."_V1.pptx";
+                $output_file_name = "Workshop_Deck_EngVer_".date('dMY')."_V1.pptx";
                 break;
             case 'customer-ppt-export':
                 $template     = "CUSTOMER";
-                $output_file_name = "Customer_Presentation_CloudLab_EngVer_".date('dMY')."_V1.pptx";
+                $output_file_name = "Customer_Presentation_EngVer_".date('dMY')."_V1.pptx";
                 break;
         }
 
@@ -658,8 +655,8 @@ class ExportController extends Controller
         //Check when all Chart Base64 Data not null, export powerpoint 
         if ($chkChartRender['error'] == false && $chkChartRender['message'] == "")
         {
-            $workshop_ppt_structure     = DB::table('powerpoint_structure')->where('file_template',$template)->orderBy('slide_number')->get(); //dd($ppt_structure); exit;
-            $workshop_ppt_static_images = DB::table('powerpoint_images')->where('file_template',$template)->orderBy('slide_number')->get(); //dd($ppt_images); exit;
+            $workshop_ppt_structure     = DB::table('powerpoint_structure')->where('file_template',$template)->where('status', 'ACTIVE')->orderBy('slide_number')->get(); //dd($ppt_structure); exit;
+            $workshop_ppt_static_images = DB::table('powerpoint_images')->where('file_template',$template)->where('status', 'ACTIVE')->orderBy('slide_number')->get(); //dd($ppt_images); exit;
             $workshop_ppt_text          = DB::table('powerpoint_text')->where('file_template',$template)->orderBy('slide_number')->get(); //dd($ppt_text); exit;
             $workshop_ppt_shape         = DB::table('powerpoint_shape')->where('file_template',$template)->orderBy('id', 'asc')->orderBy('slide_number', 'asc')->get(); //dd($ppt_shape); exit;
             

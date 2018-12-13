@@ -91,6 +91,8 @@ Route::group(['middleware' => 'localization', 'prefix' => Session::get('locale')
         Route::resource('storage-categories','StorageCategoriesController');
         Route::resource('asr-categories','ASRCategoriesController');
         Route::resource('valuta','ValutaController');
+        Route::resource('currencies','CurrencyController');
+        Route::get('currency_suggest', 'ValutaController@autocomplete')->name('currency_suggest');
 
         // for Vue module
         Route::get('price-input','PriceInputController@priceInput');

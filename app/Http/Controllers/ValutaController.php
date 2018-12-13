@@ -16,7 +16,6 @@ class ValutaController extends Controller
      */
     public function index()
     {
-        
         $currencies = DB::table('currencies_rates')->select()->get();
         return view('valuta', compact('currencies'));
         //dd($temp);
@@ -66,6 +65,7 @@ class ValutaController extends Controller
         return redirect()->back()->with('message', 'Update Successfull');;
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -75,6 +75,16 @@ class ValutaController extends Controller
     public function show($id)
     {
         //
+        $currencies = DB::table('currencies_rates')->select()->get();
+        if(count($currencies) > 0){
+            $res['message'] = "Success!";
+            $res['values'] = $currencies;
+            return response($res);
+        }
+        else{
+            $res['message'] = "Empty!";
+            return response($res);
+        }
     }
 
     /**
@@ -86,6 +96,7 @@ class ValutaController extends Controller
     public function edit($id)
     {
         //
+        
     }
 
     /**
@@ -95,9 +106,12 @@ class ValutaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $currencies = Valuta::findOrFail($request->currency_id);
+        $currencies->update($request->all());
+
+        return back();
     }
 
     /**
@@ -110,4 +124,21 @@ class ValutaController extends Controller
     {
         //
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function autocomplete(Request $request)
+    {
+         $data = Valuta::select("currency_code", "currency_name")
+                 ->where("currency_code", "LIKE", "%{$request->input('query')}%")
+                 ->orWhere("currency_name", "LIKE", "%{$request->input('query')}%")
+				 ->where("status", 'ACTIVED')
+                 ->get();
+   
+         return response()->json($data);
+    }
+
 }

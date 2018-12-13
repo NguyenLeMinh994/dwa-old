@@ -28,7 +28,7 @@ class AzureCostComparison extends Model
         }
         else
             $db_results = \Cache::get($input_of_pricing_variables_cache_name);
-        
+        //dd($db_results); exit;
         $return_data = array();
 
         foreach($db_results as $key => $value){
@@ -430,11 +430,16 @@ class AzureCostComparison extends Model
         $azure_site_recovery = array();
         $azure_site_recovery['number_of_vms_currently_under_DR'] = ($survey_info['SLA_DISASTER_RECOVERY_NUMBER_VM']->answer != null)?$survey_info['SLA_DISASTER_RECOVERY_NUMBER_VM']->answer : 0;
         
-        if ($variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value == null || $variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value == "")
-            $azure_site_recovery['number_of_vms_covered_with_ASR'] = $variables_pricing_input['number_of_vms_covered_with_ASR']->input_value;
-        else
+        $azure_site_recovery['number_of_vms_covered_with_ASR'] = 0;
+        if ($variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value != null || $variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value != "")
             $azure_site_recovery['number_of_vms_covered_with_ASR'] = $variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value;
 
+        // if ($variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value = null || $variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value == "")
+        //     $azure_site_recovery['number_of_vms_covered_with_ASR'] = $azure_site_recovery['number_of_vms_currently_under_DR'];
+        // else
+        //     $azure_site_recovery['number_of_vms_covered_with_ASR'] = $variables_pricing_input['number_of_vms_covered_with_ASR']->adjusted_value;
+        
+            //dd($azure_site_recovery);
         return $azure_site_recovery;
     }
 

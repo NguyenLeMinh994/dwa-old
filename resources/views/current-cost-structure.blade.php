@@ -127,7 +127,7 @@ Current Cost Structure
                             </table>
                         </div>
                         <div class="col-md-7">
-                            <div class="chart_content" id="chartdiv_16" style="height:450px"></div>
+                            <div class="chart_content" id="chartdiv_16" style="height:400px"></div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@ Current Cost Structure
             <div class="m-portlet mt-4">
                 <div class="m-portlet__body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <table class='table m-table m-table--head-bg-success table-hover table-bordered'>
                                 <col width="50%">
                                 <col width="50%">
@@ -157,12 +157,14 @@ Current Cost Structure
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-4">
-                            <div class="chart_content" id="chartdiv_11" style="height:400px"></div>
+                        
+                        <div class="col-md-3">
+                            <div class="chart_content" id="chartdiv_11" style="height:350px"></div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="chart_content" id="chartdiv_1" style="height:400px"></div>
+                        <div class="col-md-3">
+                            <div class="chart_content" id="chartdiv_1" style="height:350px"></div>
                         </div>
+                        
                     </div>
                    
                 </div>

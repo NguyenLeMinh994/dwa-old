@@ -93,7 +93,10 @@ class CurrentCostStructure extends Model
                                                                         + (float)$survey_info['GEN_INFRA_SPECIFIC_HP_VM_NUMBER']->answer
                                                                         + (float)$survey_info['GEN_INFRA_SPECIFIC_GPU_VM_NUMBER']->answer;
 
-        $compute_original_input_ratio['percentage_of_vms_in_dr']    =   (float)$survey_info['SLA_DISASTER_RECOVERY_NUMBER_VM']->answer / $compute_original_input_ratio['total_number_of_vms_input'];
+        if($compute_original_input_ratio['total_number_of_vms_input'] > 0)
+            $compute_original_input_ratio['percentage_of_vms_in_dr']    =   (float)$survey_info['SLA_DISASTER_RECOVERY_NUMBER_VM']->answer / $compute_original_input_ratio['total_number_of_vms_input'];
+        else
+            $compute_original_input_ratio['percentage_of_vms_in_dr']    = 0;
 
         return $compute_original_input_ratio;
     }

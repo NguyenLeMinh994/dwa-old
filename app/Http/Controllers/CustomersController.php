@@ -100,7 +100,7 @@ class CustomersController extends Controller
 
         $customer_case = \Auth::user()->guid; 
         $questionaires = array();
-        $questionaires = \Cache::get('survey-info_'.$customer_case); 
+        $questionaires = \Cache::get('survey-info_'.$customer_case); //dd($questionaires);
 
         $customer_currency_code = "USD";
         $customer_currency_rate = 1;

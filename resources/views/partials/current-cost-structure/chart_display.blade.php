@@ -25,12 +25,17 @@
         if ('{!!$currency_code!!}' == 'USD'){
             currency_symbol = '$';
         }
-        if ('{!!$currency_code!!}' == 'EUR'){
+        else if ('{!!$currency_code!!}' == 'EUR'){
             currency_symbol = '€';
         }
-        if ('{!!$currency_code!!}' == 'GBP'){
+        else if ('{!!$currency_code!!}' == 'GBP'){
             currency_symbol = '£';
         }
+        else if ('{!!$currency_code!!}' == 'DKK'){
+            currency_symbol = 'kr. ';
+        }
+        else
+            currency_symbol = '{!!$currency_code!!}';
 
         $(document).ready(function() {
             mApp.block("#main-content", {
@@ -176,7 +181,7 @@
                     }
                 ],
                 "legend":chart_legend,
-                "pullOutRadius": 40,
+                "pullOutRadius": 10,
                 "dataProvider": chartData,
                 "valueField": "value",
                 "titleField": "customer_cost",
@@ -317,7 +322,8 @@
             let chart16_legend = {
                 "position": "right",
                 "autoMargin":true,
-                "fontSize":11
+                "fontSize":11,
+                "valueText":''
             };
             let chart16_labelText = "[[percents]]%";
             let chart16_labelRadius = -35;
@@ -400,7 +406,7 @@
                 "fillAlphas": 0.9,
                 "labelText": "[[value]]%",
                 "lineAlpha": 0.3,
-                "title": "General Purpose VM's",
+                "title": "General Purpose VMs",
                 "type": "column",
                 "color": "#000000",
                 "fillColors": "#67b6dc",
@@ -410,7 +416,7 @@
                 "fillAlphas": 0.9,
                 "labelText": "[[value]]%",
                 "lineAlpha": 0.3,
-                "title": "Memory Optimised VM's",
+                "title": "Memory Optimised VMs",
                 "type": "column",
                 "color": "#000000",
                 "fillColors": "#fdd400",
@@ -420,7 +426,7 @@
                 "fillAlphas": 0.9,
                 "labelText": "[[value]]%",
                 "lineAlpha": 0.3,
-                "title": "Compute Optimised VM's",
+                "title": "Compute Optimised VMs",
                 "type": "column",
                 "color": "#000000",
                 "fillColors": "#cd82ad",
@@ -430,7 +436,7 @@
                 "fillAlphas": 0.9,
                 "labelText": "[[value]]%",
                 "lineAlpha": 0.3,
-                "title": "High Performance VM's",
+                "title": "High Performance VMs",
                 "type": "column",
                 "color": "#000000",
                 "fillColors": "#cc4748",
@@ -440,7 +446,7 @@
                 "fillAlphas": 0.9,
                 "labelText": "[[value]]%",
                 "lineAlpha": 0.3,
-                "title": "GPU VM's",
+                "title": "GPU VMs",
                 "type": "column",
                 "color": "#000000",
                 "fillColors": "#84b761",

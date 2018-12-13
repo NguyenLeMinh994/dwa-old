@@ -84,9 +84,9 @@ class DashboardCalculation extends Model
         $MO_number_of_gb_in_use = ($survey_info['GEN_INFRA_NUMBER_RAM_PRODUCTION']->answer * $memory_optimized_vms['percent_corrected_mem_opt_vm']) + $survey_info['GEN_INFRA_SPECIFIC_MO_VM_RAM_IN_USE']->answer;
 
         //Percentage of GP
-        $percentage_GP_compute = $GP_number_of_gb_in_use / ($GP_number_of_gb_in_use+$MO_number_of_gb_in_use);
+        $percentage_GP_compute = ($GP_number_of_gb_in_use > 0) ? $GP_number_of_gb_in_use / ($GP_number_of_gb_in_use + $MO_number_of_gb_in_use) : 0;
         //Percentage of MO
-        $percentage_MO_compute = $MO_number_of_gb_in_use / ($GP_number_of_gb_in_use+$MO_number_of_gb_in_use);
+        $percentage_MO_compute = ($GP_number_of_gb_in_use > 0) ? $MO_number_of_gb_in_use / ($GP_number_of_gb_in_use + $MO_number_of_gb_in_use) : 0;
 
         //return data
         $correction_mem_optimised = array();
@@ -501,6 +501,8 @@ class DashboardCalculation extends Model
         //data collection for calculation Azure Net
         $input_pricing_variables = $azureCalculation->Input_Of_Pricing_Variables($survey_info); //dd($input_pricing_variables);
         $azure_site_recovery = $azureCalculation->Azure_Site_Recovery($survey_info); //dd($azure_site_recovery);
+        $adjusting_azure_outbound_traffic_cost = $azureCalculation->Adjusting_Azure_Outbound_Traffic_Cost($survey_info);
+        
         $customers_internal_memory_GB_RAM_utilization_unit_price = $this->Customers_Internal_Memory_GB_RAM_Utilization_Unit_Price($survey_info); //dd($customers_internal_memory_GB_RAM_utilization_unit_price);
         
         $weighted_price_calculation_for_vm_WIN = $this->Weighted_Price_Calculation_for_VM($survey_info, $region, 'Windows'); //dd($weighted_price_calculation_for_vm_WIN);
@@ -771,11 +773,11 @@ class DashboardCalculation extends Model
         $cost_price_of_customer_required_infrastructure['high_performance_production_VMs_linux_os']['buyer_for_RI']         = $high_performance_buyer_for_RI_linux_os_AZURE_NET;
 
         //GPU
-        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_windows_os']['customer_cost'] = $gpu_production_VMs_windows_os;
-        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_linux_os']['customer_cost'] = $gpu_production_VMs_linux_os;
+        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_windows_os']['customer_cost']                   = $gpu_production_VMs_windows_os;
+        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_linux_os']['customer_cost']                     = $gpu_production_VMs_linux_os;
 
-        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_windows_os']['azure_net_cost'] = $gpu_production_VMs_windows_os_AZURE_NET;
-        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_linux_os']['azure_net_cost'] = $gpu_production_VMs_linux_os_AZURE_NET;
+        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_windows_os']['azure_net_cost']                  = $gpu_production_VMs_windows_os_AZURE_NET;
+        $cost_price_of_customer_required_infrastructure['gpu_production_VMs_linux_os']['azure_net_cost']                    = $gpu_production_VMs_linux_os_AZURE_NET;
 
         $cost_price_of_customer_required_infrastructure['gpu_production_VMs_windows_os']['base_on_RI']                      = $gpu_base_on_RI_windows_os_AZURE_NET;
         $cost_price_of_customer_required_infrastructure['gpu_production_VMs_linux_os']['base_on_RI']                        = $gpu_base_on_RI_linux_os_AZURE_NET;
@@ -802,8 +804,8 @@ class DashboardCalculation extends Model
         $cost_price_of_customer_required_infrastructure['total_azure_cost_net_buyer_for_RI']['linux']   = $all_linux_buyer_for_RI_azure_net_cost;
 
         $cost_price_of_customer_required_infrastructure['total_cost_compare']['customer_cost']          = $all_windows_customer_cost + $all_linux_customer_cost;
-        $cost_price_of_customer_required_infrastructure['total_cost_compare']['azure_net_cost']         = $all_windows_azure_net_cost + $all_linux_azure_net_cost;
-        $cost_price_of_customer_required_infrastructure['total_cost_compare']['base_on_RI']             = $all_windows_base_on_RI_azure_net_cost + $all_linux_base_on_RI_azure_net_cost;
+        $cost_price_of_customer_required_infrastructure['total_cost_compare']['azure_net_cost']         = $all_windows_azure_net_cost + $all_linux_azure_net_cost  + $adjusting_azure_outbound_traffic_cost['extra_cost_for_outbound_traffic'];
+        $cost_price_of_customer_required_infrastructure['total_cost_compare']['base_on_RI']             = $all_windows_base_on_RI_azure_net_cost + $all_linux_base_on_RI_azure_net_cost + $adjusting_azure_outbound_traffic_cost['extra_cost_for_outbound_traffic'];
         $cost_price_of_customer_required_infrastructure['total_cost_compare']['buyer_for_RI']           = $all_windows_buyer_for_RI_azure_net_cost + $all_linux_buyer_for_RI_azure_net_cost;
 
         //dd($cost_price_of_customer_required_infrastructure);
@@ -910,7 +912,7 @@ class DashboardCalculation extends Model
         $cost_comparison_between_customer_storage_costs_and_azure_storage_cost = $this->Cost_Comparison_Between_Customer_Storage_Costs_and_Azure_Storage_Cost($survey_info); //dd($cost_comparison_between_customer_storage_costs_and_azure_storage_cost);
 
         $vms_including_all_other_costs_except_storage['customer_cost']                                          = ($cost_price_of_customer_required_infrastructure['total_customer_cost']['windows'] + $cost_price_of_customer_required_infrastructure['total_customer_cost']['linux']);
-        $vms_including_all_other_costs_except_storage['azure_base_cost']                                        = $cost_price_of_customer_required_infrastructure['total_azure_net_cost']['windows'] + $cost_price_of_customer_required_infrastructure['total_azure_net_cost']['linux'];// + $cost_price_of_customer_required_infrastructure['vms_under_ASR']['azure_net_cost'];
+        $vms_including_all_other_costs_except_storage['azure_base_cost']                                        = $cost_price_of_customer_required_infrastructure['total_cost_compare']['azure_net_cost'];//$cost_price_of_customer_required_infrastructure['total_azure_net_cost']['windows'] + $cost_price_of_customer_required_infrastructure['total_azure_net_cost']['linux'];// + $cost_price_of_customer_required_infrastructure['vms_under_ASR']['azure_net_cost'];
         
         $vms_including_all_other_costs_except_storage['benefit_by_paying_real_usage_per_hour']                  = (float)$vms_including_all_other_costs_except_storage['azure_base_cost'] - ((float)$vms_including_all_other_costs_except_storage['azure_base_cost'] * (float)$trimming_benefits_of_switching_on_off_vms['adjusted_reduction_advantage_of_switching_on_off_VMs']);
         $vms_including_all_other_costs_except_storage['benefit_by_optimizing_utilization_of_the_processor_capacity']    = (float)$vms_including_all_other_costs_except_storage['benefit_by_paying_real_usage_per_hour'] - 
@@ -1018,8 +1020,12 @@ class DashboardCalculation extends Model
         $premise_costs['annual_maintenance_cost_percentage'] = 0.18;
 
         //Cost per month = (Investment/Depreciation Period )+( Invetstment * Annual Maintain cost/12)
-        $premise_costs['cost_per_month_current'] = ($premise_costs['investment_blade'] / $premise_costs['depreciation_period']) 
-                                                    + ($premise_costs['investment_blade'] * $premise_costs['annual_maintenance_cost_percentage'] / 12);
+        if($premise_costs['depreciation_period'] > 0){
+            $premise_costs['cost_per_month_current'] = ($premise_costs['investment_blade'] / $premise_costs['depreciation_period']) 
+                                                        + ($premise_costs['investment_blade'] * $premise_costs['annual_maintenance_cost_percentage'] / 12);
+        }
+        else
+            $premise_costs['cost_per_month_current'] = 0;
 
         $premise_costs['gb_ram']                            = 512;
         $premise_costs['price_per_ram']                     = $premise_costs['cost_per_month_current'] / $premise_costs['gb_ram'];
@@ -1062,11 +1068,12 @@ class DashboardCalculation extends Model
                                 + $current_gpu_vm;
         
         //Percentage column
-        $current_general_purpose_vm_percentage      = ($current_general_purpose_vm / $total_current_cost);
-        $current_memory_optimised_vm_percentage     = ($current_memory_optimised_vm / $total_current_cost);
-        $current_compute_optimised_percentage       = ($current_compute_optimised / $total_current_cost);
-        $current_high_performance_vm_percentage     = ($current_high_performance_vm / $total_current_cost);
-        $current_gpu_vm_percentage                  = ($current_gpu_vm / $total_current_cost);
+        $current_general_purpose_vm_percentage      = ($current_general_purpose_vm > 0)     ? ($current_general_purpose_vm / $total_current_cost)   : 0;
+        $current_memory_optimised_vm_percentage     = ($current_memory_optimised_vm > 0)    ? ($current_memory_optimised_vm / $total_current_cost)  : 0;
+        $current_compute_optimised_percentage       = ($current_compute_optimised > 0)      ? ($current_compute_optimised / $total_current_cost)    : 0;
+        $current_high_performance_vm_percentage     = ($current_high_performance_vm > 0)    ? ($current_high_performance_vm / $total_current_cost)  : 0;
+        $current_gpu_vm_percentage                  = ($current_gpu_vm > 0)                 ? ($current_gpu_vm / $total_current_cost)               : 0;
+        
         $total_percentage                           = $current_general_purpose_vm_percentage 
                                                         + $current_memory_optimised_vm_percentage 
                                                         + $current_compute_optimised_percentage 
@@ -1126,7 +1133,7 @@ class DashboardCalculation extends Model
         $general_purpose_WIN = 0;
         $general_purpose_LINUX = 0;
         
-        if (strtolower($survey_info['GEN_INFRA_OWN_OR_FEE_LICENSE']->answer)  == 'yes'){
+        if (strtolower(trim($survey_info['GEN_INFRA_OWN_OR_FEE_LICENSE']->answer))  == 'yes'){
             $general_purpose_WIN = (float)$survey_info['GEN_INFRA_PERCENTAGE_WINDOWS_SERVERS']->answer;
             $general_purpose_LINUX = 1 - $general_purpose_WIN;
 
@@ -1139,22 +1146,23 @@ class DashboardCalculation extends Model
         
         $memory_optimized_WIN = 0;
         $memory_optimized_LINUX = 0;
-        $calculation_mixed_MO_ratio_windows_linux_percentages = $this->Calculation_Mixed_MO_Ratio_Windows_Linux_percentages($survey_info);
+        if (strtolower(trim($survey_info['GEN_INFRA_SPECIFIC_MO_VM']->answer)) == 'yes'){
+            $calculation_mixed_MO_ratio_windows_linux_percentages = $this->Calculation_Mixed_MO_Ratio_Windows_Linux_percentages($survey_info);
 
-        //if (strtolower($survey_info['GEN_INFRA_SPECIFIC_MO_VM']->answer)  == 'yes'){
             $memory_optimized_WIN = $calculation_mixed_MO_ratio_windows_linux_percentages['percentage_windows_os'];
             $memory_optimized_LINUX = $calculation_mixed_MO_ratio_windows_linux_percentages['percentage_linux_os'];
 
             $total_WIN += $memory_optimized_WIN;
             $total_LINUX += $memory_optimized_LINUX;
-
+        
+        //if ((strtolower(trim($survey_info['GEN_INFRA_SPECIFIC_MO_VM']->answer)) == 'yes') || ($memory_optimized_WIN + $memory_optimized_LINUX) > 0){
             $count_WIN += 1;
             $count_LINUX += 1;
-        //}
+        }
         
         $compute_optimized_WIN = 0;
         $compute_optimized_LINUX = 0;
-        if (strtolower($survey_info['GEN_INFRA_HEAVY_BATCH']->answer)  == 'yes'){
+        if (strtolower(trim($survey_info['GEN_INFRA_HEAVY_BATCH']->answer))  == 'yes'){ 
             $compute_optimized_WIN = (float)$survey_info['GEN_INFRA_HEAVY_BATCH_PERCENTAGE_WINDOWS']->answer;
             $compute_optimized_LINUX = 1 - $compute_optimized_WIN;
 
@@ -1167,7 +1175,7 @@ class DashboardCalculation extends Model
         
         $high_performance_WIN = 0;
         $high_performance_LINUX = 0;
-        if (strtolower($survey_info['GEN_INFRA_SPECIFIC_HP_VM']->answer)  == 'yes'){
+        if (strtolower(trim($survey_info['GEN_INFRA_SPECIFIC_HP_VM']->answer))  == 'yes'){
             $high_performance_WIN = (float)$survey_info['GEN_INFRA_SPECIFIC_HP_VM_PERCENTAGE_WINDOWS']->answer;
             $high_performance_LINUX = 1 - $high_performance_WIN;
 
@@ -1180,7 +1188,7 @@ class DashboardCalculation extends Model
         
         $GPU_WIN = 0;
         $GPU_LINUX = 0;
-        if (strtolower($survey_info['GEN_INFRA_SPECIFIC_GPU_VM']->answer)  == 'yes'){
+        if (strtolower(trim($survey_info['GEN_INFRA_SPECIFIC_GPU_VM']->answer))  == 'yes'){
             $GPU_WIN = (float)$survey_info['GEN_INFRA_SPECIFIC_GPU_VM_PERCENTAGE_WINDOWS']->answer;
             $GPU_LINUX = 1 - $GPU_WIN;
 
@@ -1191,6 +1199,9 @@ class DashboardCalculation extends Model
             $count_LINUX += 1;
         }
 
+        // echo $total_WIN. ' - ' . $count_WIN;
+        // echo '<br>'.$total_LINUX. ' - ' . $count_LINUX;
+        // exit;
         // AVERAGE all of above value | not count IF value = 0
         $average_WIN = ($total_WIN > 0) ? ($total_WIN / $count_WIN) : 0;
         $average_LINUX = ($total_LINUX > 0) ? ($total_LINUX / $count_LINUX) : 0;
@@ -1214,7 +1225,8 @@ class DashboardCalculation extends Model
 
         $customer_windows_vs_linux_split['average']['windows'] = $average_WIN;
         $customer_windows_vs_linux_split['average']['linux'] = $average_LINUX;
-
+        
+        //dd($customer_windows_vs_linux_split);
         return $customer_windows_vs_linux_split;
     }
 
@@ -1262,10 +1274,14 @@ class DashboardCalculation extends Model
         $total_potential_in_terms_of_GBRAM_available                            = $total_GBRAM_in_use_for_pre_prodution_and_VMs_used_for_internal_purpose
                                                                                     + $total_GBRAM_in_use_of_RDS_and_CITRIX_VMs
                                                                                     + $total_volume_of_load_balanced_VMs;
-        $percentages_available_for_switching_on_off                             = $total_potential_in_terms_of_GBRAM_available 
+        if($total_potential_in_terms_of_GBRAM_available > 0){
+            $percentages_available_for_switching_on_off                         = $total_potential_in_terms_of_GBRAM_available 
                                                                                     / ($correction_mem_optimised['number_of_gb_in_use']['GP_number_of_gb_in_use'] + $correction_mem_optimised['number_of_gb_in_use']['MO_number_of_gb_in_use']);
-
-        //return array
+        }
+        else
+            $percentages_available_for_switching_on_off = 0;
+        
+            //return array
         $potential_vms_available_switching_on_off = array();
         $potential_vms_available_switching_on_off['total_GBRAM_in_use_for_pre_prodution_and_VMs_used_for_internal_purpose'] = $total_GBRAM_in_use_for_pre_prodution_and_VMs_used_for_internal_purpose;
         $potential_vms_available_switching_on_off['total_GBRAM_in_use_of_RDS_and_CITRIX_VMs']                               = $total_GBRAM_in_use_of_RDS_and_CITRIX_VMs;

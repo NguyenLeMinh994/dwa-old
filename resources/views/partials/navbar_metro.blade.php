@@ -1,5 +1,30 @@
 <!-- begin::Header -->
 <header id="m_header" class="m-grid__item m-header " m-minimize="minimize" m-minimize-mobile="minimize" m-minimize-offset="200" m-minimize-mobile-offset="200" >
+    <!--begin::Modal-->
+    <div class="modal fade" id="switch_notify_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form id="switchForm" class="form-lang" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">CAUTION</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <div id="switchContent"></div>
+                        <input type="hidden" id="contentChange" name="" value=""/>
+                        {{ csrf_field() }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info">Continue</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end::Modal-->
     <div class="m-header__top">
         <div class="m-container m-container--fluid m-container--full-height m-page__container">
             <div class="m-stack m-stack--ver m-stack--desktop">
@@ -18,9 +43,96 @@
                                 $current_region = $customer_setup_config['azure_locale'];
                                 $customer_currency = $customer_setup_config['currency']['currency_code'];
                             ?>
-                            <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas m-header-menu--skin-light m-header-menu--submenu-skin-light">
+                            <!-- mobile display only -->
+                            <!--
+                            <div id="sregion-mobile" class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-left m-dropdown--align-push" m-dropdown-toggle="click" aria-expanded="true">
+                                <a href="#" class="dropdown-toggle m-dropdown__toggle btn btn-outline-metal m-btn  m-btn--icon m-btn--pill">
+                                    <span>{{$current_region}}</span>
+                                </a>
+                                <div class="m-dropdown__wrapper" style="z-index: 101;">
+                                    <span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust" style="right: auto; left: 80px;"></span>
+                                    <div class="m-dropdown__inner">
+                                        <div class="m-dropdown__body">
+                                            <div class="m-dropdown__content">
+                                                <ul class="m-menu__subnav">
+                                                    <li class="m-nav__section m-nav__section--first m--hide">
+                                                        <span class="m-nav__section-text">Quick Menu</span>
+                                                    </li>
+                                                    <li class="m-nav__item" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--submenu-tabs" m-menu-link-redirect="1" aria-haspopup="true"  m-menu-submenu-toggle="click">
+                                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                                            <i class="m-nav__link-icon flaticon-share"></i>
+                                                            <span class="m-nav__link-text">Human Resources</span>
+                                                        </a>
+                                                        <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                                            <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 71.5px;"></span>
+                                                            <ul class="m-menu__subnav">
+                                                                <li class="m-menu__item " aria-haspopup="true">
+                                                                    <a href="/scenario1-calculation" class="m-menu__link ">
+                                                                        <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">Scenario 1</span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true">
+                                                                    <a href="/scenario2-calculation" class="m-menu__link ">
+                                                                        <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">Scenario 2</span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="m-menu__item " aria-haspopup="true">
+                                                                    <a href="/scenario3-calculation" class="m-menu__link ">
+                                                                        <i class="m-menu__link-bullet m-menu__link-bullet--line"><span></span></i>
+                                                                        <span class="m-menu__link-title">
+                                                                            <span class="m-menu__link-wrap">
+                                                                                <span class="m-menu__link-text">Scenario 3</span>
+                                                                            </span>
+                                                                        </span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                    
+                                                    <li class="m-nav__separator m-nav__separator--fit">
+                                                    </li>
+                                                    <li class="m-nav__item">
+                                                        <a href="" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                        <span class="m-nav__link-text">Customer Relationship</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="m-nav__item">
+                                                        <a href="" class="m-nav__link">
+                                                        <i class="m-nav__link-icon flaticon-info"></i>
+                                                        <span class="m-nav__link-text">Order Processing</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- end region mobile -->
+                            
+                            <script>
+                                function explainRegionMenu(menuID){
+                                    if($("#m_header_menu2_sub").hasClass("m-menu__item--hover") == false)
+                                        $("#m_header_menu2_sub").addClass("m-menu__item--hover");
+                                    else
+                                        $("#m_header_menu2_sub").removeClass("m-menu__item--hover");
+                                }
+                            </script>
+                            <div onclick="explainRegionMenu()" id="m_header_menu2" class="m-header-menu m-header-menu--skin-light m-header-menu--submenu-skin-light">
                                 <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
-                                    <li class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown" m-menu-submenu-toggle="click" aria-haspopup="true">
+                                    <li id="m_header_menu2_sub" class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown" m-menu-submenu-toggle="click" aria-haspopup="true">
                                         <a href="javascript: void(0)" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon flaticon-placeholder"></i>
                                             <span class="m-menu__link-text">Azure Region: {{$current_region}}</span>
@@ -57,6 +169,7 @@
                                     </li>
                                 </ul>
                             </div>
+                            
                             <!-- begin::Responsive Header Menu Toggler-->
                             <a id="m_aside_header_menu_mobile_toggle" href="javascript:;" class="m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
                                 <span></span>
@@ -128,6 +241,112 @@
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
+                                <li class="m-nav__item m-topbar__user-profile m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width">
+                                    <a href="#" class="m-nav__link">
+                                        <span class="m-topbar__welcome">Customer &nbsp;</span>
+                                        <span class="m-nav__link-title">
+                                            {{isset($customer_setup_config['customerName'])?$customer_setup_config['customerName']:''}}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li id="m_quicksearch2" m-quicksearch-mode="dropdown" class="m-nav__item m-nav__item--focus m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--skin-light m-list-search m-list-search--skin-light" m-dropdown-toggle="click" m-dropdown-persistent="1">
+                                    <style>
+                                        .fix_height_search{
+                                            height:auto !important;
+                                        }
+                                    </style>
+                                    <script>
+                                        $(document).ready(function() {
+                                            if ($('#m_quicksearch2').length === 0 ) {
+                                                return;
+                                            }
+
+                                            quicksearch = new mQuicksearch('m_quicksearch2', {
+                                                mode: mUtil.attr( 'm_quicksearch2', 'm-quicksearch-mode'), // quick search type
+                                                minLength: 3
+                                            });    
+
+                                            quicksearch.on('search', function(the) {
+                                                the.showProgress();  
+                                                        
+                                                $.ajax({
+                                                    url: '/currency_suggest',
+                                                    data: {query: the.query},
+                                                    dataType: 'json',
+                                                    success: function(res) {
+                                                        the.hideProgress(); //console.log(res);
+                                                        let result = '<div class="m-list-search__results">';
+                                                        result += '<span class="m-list-search__result-category m-list-search__result-category--first">SUGGESTED CURRENCIES</span>';
+                                                        
+                                                        for (i in res) {
+                                                            let urlSwitch = "javascript:confirmSwitch('Currency', '{{$customer_currency}}', '" + res[i].currency_code + "')";
+                                                            result += '<a href="'+ urlSwitch +'" class="m-list-search__result-item"><span class="m-list-search__result-item-text">' + res[i].currency_code + ' - ' + res[i].currency_name + '</span></a>';
+                                                        }
+
+                                                        result = result + '</div>';
+                                                        the.showResult(result);                     
+                                                    },
+                                                    error: function(res) {
+                                                        the.hideProgress();
+                                                        the.showError('Connection error. Please try again later.');      
+                                                    }
+                                                });
+                                            });      
+                                        });
+                                    </script>
+                                    <a href="#" class="m-nav__link m-dropdown__toggle">
+                                        <span style="width:15px" class="m-nav__link-icon m--font-warning">
+                                            @if ($customer_currency == 'EUR')
+                                                <i class="fa fa-euro-sign"></i>
+                                            @endif
+                                            @if ($customer_currency == 'USD')
+                                                <i class="fa fa-dollar-sign"></i>
+                                            @endif
+                                            @if ($customer_currency == 'GBP')
+                                                <i class="fa fa-pound-sign"></i>
+                                            @endif
+                                        </span>
+                                        <span class="m-nav__link-icon-wrapper m-nav__link-text m--font-warning">{{$customer_currency}}</span>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
+                                        <div class="m-dropdown__inner ">
+                                            <div class="m-dropdown__header">
+                                                <form class="m-list-search__form">
+                                                    <div class="m-list-search__form-wrapper">
+                                                        <span class="m-list-search__form-input-wrapper">
+                                                            <input id="m_quicksearch_input" autocomplete="off" type="text" name="q" class="m-list-search__form-input" value="" placeholder="Search ...">
+                                                        </span>
+                                                        <span class="m-list-search__form-icon-close" id="m_quicksearch_close">
+                                                            <i class="la la-remove"></i>
+                                                        </span>
+                                                    </div>
+                                                </form>
+                                                <div style="margin-top:5px" class="m-list-search__results">
+                                                    <span class="m-list-search__result-category m-list-search__result-category--first">Popular Currencies</span>
+                                                    <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'USD');" class="m-list-search__result-item">
+                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-dollar-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-text">USD</span>
+                                                    </a>
+                                                    <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'EUR')" class="m-list-search__result-item">
+                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-euro-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-text">EUR</span>
+                                                    </a>
+                                                    <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'GBP')" class="m-list-search__result-item">
+                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-pound-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-text">GBP</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__scrollable m-scrollable fix_height_search" data-scrollable="true" data-height="300" data-mobile-height="200">
+                                                    <div class="m-dropdown__content"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!--
                                 <li class="m-nav__item m-topbar__languages m-dropdown m-dropdown--small m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width" m-dropdown-toggle="click" aria-expanded="true">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
                                         <span style="width:15px" class="m-nav__link-icon">
@@ -181,7 +400,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li>
+                                </li> -->
                                 
                                 <li class="m-nav__item m-topbar__languages m-dropdown m-dropdown--small m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width" m-dropdown-toggle="click" aria-expanded="true">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
@@ -312,30 +531,6 @@
             </div>
         </div>
     </div>
-    <!--begin::Modal-->
-    <div class="modal fade" id="switch_notify_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <form id="switchForm" class="form-lang" method="post">
-                        <div class="modal-header">
-                            <h5 class="modal-title">CAUTION</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" >
-                            <div id="switchContent"></div>
-                            <input type="hidden" id="contentChange" name="" value=""/>
-                            {{ csrf_field() }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-info">Continue</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--end::Modal-->
+    
 </header>
 <!-- end::Header -->

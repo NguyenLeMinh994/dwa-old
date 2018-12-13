@@ -472,10 +472,13 @@ class AzureCostComparisonController extends Controller
         $customer_setup_config = session('customer_setup_config');
         $this->region = $customer_setup_config['azure_locale'];
 
+        $this->currency_rate    = $customer_setup_config['currency']['currency_rate'];
+        $this->currency_code    = $customer_setup_config['currency']['currency_code'];
+
         $params_request = $request->all();
         $uid = $params_request['uid'];
         
-        $adjust_custom_price = $params_request['adjust_custom_price'];
+        $adjust_custom_price = $params_request['adjust_custom_price'] / $this->currency_rate;
        
         if($uid == $this->survey_info['case_id']){
             $update_st = dwa_pricing_variables_input::where(['pricing_variables' => 'adjust_custom_price', 'uid' => $uid])
@@ -489,8 +492,21 @@ class AzureCostComparisonController extends Controller
         $azureCalculation = new AzureCostComparison();
         $adjusting_azure_outbound_traffic_cost    = $azureCalculation->Adjusting_Azure_Outbound_Traffic_Cost($this->survey_info);
 
+        //reload chart Data
+        $dwaCalculation = new DashboardCalculation();
+        $cost_price_of_customer_required_infrastructure                                     = $dwaCalculation->Cost_Price_of_Customer_Required_Infrastructure($this->survey_info, $this->region);
+        $cost_comparison_between_customer_storage_costs_and_azure_storage_cost              = $dwaCalculation->Cost_Comparison_Between_Customer_Storage_Costs_and_Azure_Storage_Cost($this->survey_info);
+        $comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost    = $dwaCalculation->Comparison_Customer_Overall_Infrastructure_Costs_And_Azure_Infrastructure_Of_This_Capacity_Cost($this->survey_info, $this->region);
+
+        $calculations_data = array();
+        $calculations_data['cost_price_of_customer_required_infrastructure'] = $cost_price_of_customer_required_infrastructure;
+        $calculations_data['cost_comparison_between_customer_storage_costs_and_azure_storage_cost'] = $cost_comparison_between_customer_storage_costs_and_azure_storage_cost;
+        $calculations_data['comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost'] = $comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost;
+        $chartData = $this->updateChartData($calculations_data);
+
         return response()->json(array(
             'update_st' => $update_st,
+            'chartData' => $chartData,
             'adjusting_azure_outbound_traffic_cost'  => $adjusting_azure_outbound_traffic_cost
         ));
     }

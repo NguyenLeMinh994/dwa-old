@@ -67,9 +67,6 @@ class CurrentCostStructure extends Model
         $ratio_over_committed_cpu = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer
                                     / (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer ;
 
-        $number_of_gbram_per_vm = 0;
-        $ratio_cpu_gbram = 0;
-
         //return data
         $summary_of_the_inputs = array();
         $summary_of_the_inputs['total_indirect_cost'] = $total_indirect_cost;

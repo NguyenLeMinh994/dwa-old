@@ -67,6 +67,9 @@ class CurrentCostStructure extends Model
         $ratio_over_committed_cpu = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer
                                     / (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer ;
 
+        $number_of_gbram_per_vm = $total_of_gb_in_use / $num_of_reported_vms;
+        $ratio_cpu_gbram = $total_of_gb_in_use / $num_of_cpus_in_use;
+
         //return data
         $summary_of_the_inputs = array();
         $summary_of_the_inputs['total_indirect_cost'] = $total_indirect_cost;
@@ -77,8 +80,8 @@ class CurrentCostStructure extends Model
         $summary_of_the_inputs['num_of_cpus_in_use'] = $num_of_cpus_in_use;
         $summary_of_the_inputs['total_of_gb_in_use'] = $total_of_gb_in_use;
         $summary_of_the_inputs['ratio_over_committed_cpu'] = $ratio_over_committed_cpu;
-        $summary_of_the_inputs['number_of_gbram_per_vm'] =  $total_of_gb_in_use / $num_of_reported_vms;
-        $summary_of_the_inputs['ratio_cpu_gbram'] = $total_of_gb_in_use / $num_of_cpus_in_use;
+        $summary_of_the_inputs['number_of_gbram_per_vm'] =  $number_of_gbram_per_vm;
+        $summary_of_the_inputs['ratio_cpu_gbram'] = $ratio_cpu_gbram;
         
         return $summary_of_the_inputs;
     }

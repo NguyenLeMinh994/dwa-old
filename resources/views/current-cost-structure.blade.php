@@ -71,6 +71,21 @@ Current Cost Structure
                                         <td></td>
                                         <td>{{number_format($summaryOfTheInputs['total_of_gb_in_use'],0)}}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Ratio over-committed CPU?</td>
+                                        <td></td>
+                                        <td>{{number_format($summaryOfTheInputs['ratio_over_committed_cpu'],1)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Number of GBRAM per VM</td>
+                                        <td></td>
+                                        <td><span title="The average configured VM is 3 CPUs and 10 GBRAM.">{{number_format($summaryOfTheInputs['number_of_gbram_per_vm'],1)}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ratio CPU - GBRAM</td>
+                                        <td></td>
+                                        <td>{{number_format($summaryOfTheInputs['ratio_cpu_gbram'],1)}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -122,6 +137,31 @@ Current Cost Structure
                                             echo number_format($cost_per_month_for_new_hardware*$currency_rate, 0, '.', ',');
                                         ?>  
                                         </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class='table m-table m-table--head-bg-success table-hover table-bordered'>
+                                <col width="50%">
+                                <col width="50%">
+                                <thead>
+                                    <tr>
+                                        <th >Current Processors</th>
+                                        <th >Release Date of Processor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_name;?></td>
+                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_released));?></td>
+                                    </tr>
+                                    <tr>
+                                        <td><?php echo $survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_name;?></td>
+                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_released));?></td>
+                                    </tr>
+                                    <tr>
+                                        <td><?php echo $survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_name;?></td>
+                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_released));?></td>
                                     </tr>
                                 </tbody>
                             </table>

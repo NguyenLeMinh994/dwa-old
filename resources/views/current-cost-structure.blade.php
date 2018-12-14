@@ -72,7 +72,7 @@ Current Cost Structure
                                         <td>{{number_format($summaryOfTheInputs['total_of_gb_in_use'],0)}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Ratio over-committed CPU?</td>
+                                        <td>Ratio over-committed CPU</td>
                                         <td></td>
                                         <td>{{number_format($summaryOfTheInputs['ratio_over_committed_cpu'],1)}}</td>
                                     </tr>

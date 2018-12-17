@@ -146,22 +146,22 @@ Current Cost Structure
                                 <col width="50%">
                                 <thead>
                                     <tr>
-                                        <th >Current Processors</th>
-                                        <th >Release Date of Processor</th>
+                                        <th >Current Processor</th>
+                                        <th >Release</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><?php echo $survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_name;?></td>
-                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_released));?></td>
+                                        <td><?php echo date('M Y', strtotime($survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_released));?></td>
                                     </tr>
                                     <tr>
                                         <td><?php echo $survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_name;?></td>
-                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_released));?></td>
+                                        <td><?php echo date('M Y', strtotime($survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_released));?></td>
                                     </tr>
                                     <tr>
                                         <td><?php echo $survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_name;?></td>
-                                        <td><?php echo date('m/d/Y', strtotime($survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_released));?></td>
+                                        <td><?php echo date('M Y', strtotime($survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_released));?></td>
                                     </tr>
                                 </tbody>
                             </table>

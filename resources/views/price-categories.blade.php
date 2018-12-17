@@ -22,7 +22,84 @@ VM Categories
                 </div>
                 <div style="overflow-x:auto;" class="m-portlet__body">
                     @include('partials.price-categories.chart_display')
-                    <table class='table m-table m-table--head-bg-success table-hover table-bordered'>
+                    <!--begin: Search Form -->
+                    <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+                        <div class="row align-items-center">
+                            <div class="col-xl-8 order-2 order-xl-1">
+                                <div class="form-group m-form__group row align-items-center">
+                                    <div class="col-md-4">
+                                        <div class="m-form__group m-form__group--inline">
+                                            <div class="m-form__label">
+                                                <label>
+                                                    VM Type:
+                                                </label>
+                                            </div>
+                                            <div class="m-form__control">
+                                                <select class="form-control m-bootstrap-select" id="m_form_vmtype">
+                                                    <option value="">
+                                                        All
+                                                    </option>
+                                                    @foreach($vm_type_filter as $vm_type)
+                                                    <option value="{{$vm_type->MeterTypes}}">
+                                                        {{$vm_type->MeterTypes}}
+                                                    </option>
+                                                    @endforeach
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="d-md-none m--margin-bottom-10"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="m-form__group m-form__group--inline">
+                                            <div class="m-form__label">
+                                                <label class="m-label m-label--single">
+                                                    Sub Category:
+                                                </label>
+                                            </div>
+                                            <div class="m-form__control">
+                                                <select class="form-control m-bootstrap-select" id="m_form_subcategory">
+                                                    <option value="">
+                                                        All
+                                                    </option>
+                                                    @foreach($sub_category_filter as $sub_category)
+                                                    <option value="{{$sub_category->MeterSubCategory}}">
+                                                        {{$sub_category->MeterSubCategory}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="d-md-none m--margin-bottom-10"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="m-form__group m-form__group--inline">
+                                            <div class="m-form__label">
+                                                <label class="m-label m-label--single">
+                                                    OS Type:
+                                                </label>
+                                            </div>
+                                            <div class="m-form__control">
+                                                <select class="form-control m-bootstrap-select" id="m_form_ostype">
+                                                    <option value="">
+                                                        All
+                                                    </option>
+                                                    @foreach($os_type_filter as $os_type)
+                                                    <option value="{{$os_type->OperationSystem}}">
+                                                        {{$os_type->OperationSystem}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="d-md-none m--margin-bottom-10"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end: Search Form -->
+                    <table class="m-datatable" id="html_table" width="100%">
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -58,9 +135,9 @@ VM Categories
                                 <td>{{$cat->Cores}}</td>
                                 <td>{{$cat->RAM}}</td>
                                 <td>{{$cat->MeterRates}}</td>
-                                <th>{{number_format($cat->RAM/$cat->Cores, 2, '.', '') }}</th>
-                                <th>{{$currency_code}}</th>
-                                <th>
+                                <td>{{number_format($cat->RAM/$cat->Cores, 2, '.', '') }}</td>
+                                <td>{{$currency_code}}</td>
+                                <td>
                                     {{$cat->Cost}}
                                     <?php
                                     
@@ -78,9 +155,9 @@ VM Categories
                                         //{{$cost}}
                                     ?>
                                         
-                                </th>
-                                <th>{{number_format($price, 2, '.', '')}}</th>
-                                <th>{{number_format($gbRam_Price, 2, '.', '')}}</th>
+                                </td>
+                                <td>{{number_format($price, 2, '.', '')}}</td>
+                                <td>{{number_format($gbRam_Price, 2, '.', '')}}</td>
                                 
                                 <td>Admin</td>
                                 <td>{{$cat->updated_at}}</td>
@@ -260,6 +337,43 @@ VM Categories
                         var modal = $(this)
 
                         modal.find('.modal-body #cat_id').val(cat_id);
+                    });
+
+                    var DatatableHtmlTable = function() {
+                        //== Private functions
+
+                        // demo initializer
+                        var run_htmltable = function() {
+
+                            var datatable = $('.m-datatable').mDatatable({});
+
+                            $('#m_form_vmtype').on('change', function() {
+                                datatable.search($(this).val().toLowerCase(), 'VM Type');
+                            });
+
+                            $('#m_form_subcategory').on('change', function() {
+                                datatable.search($(this).val().toLowerCase(), 'Sub Category');
+                            });
+
+                            $('#m_form_ostype').on('change', function() {
+                                datatable.search($(this).val().toLowerCase(), 'OS Type');
+                            });
+
+                            $('#m_form_vmtype, #m_form_subcategory, #m_form_ostype').selectpicker();
+
+                        };
+
+                        return {
+                            //== Public functions
+                            init: function() {
+                                // init dmeo
+                                run_htmltable();
+                            },
+                        };
+                    }();
+
+                    jQuery(document).ready(function() {
+                        DatatableHtmlTable.init();
                     });
                 });
             </script>

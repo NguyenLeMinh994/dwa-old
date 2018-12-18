@@ -30,7 +30,7 @@ VM Categories
                                     <div class="col-md-4">
                                         <div class="m-form__group m-form__group--inline">
                                             <div class="m-form__label">
-                                                <label>
+                                                <label style="width: 60px;">
                                                     VM Type:
                                                 </label>
                                             </div>
@@ -53,7 +53,7 @@ VM Categories
                                     <div class="col-md-4">
                                         <div class="m-form__group m-form__group--inline">
                                             <div class="m-form__label">
-                                                <label class="m-label m-label--single">
+                                                <label class="m-label m-label--single" style="width: 99px;">
                                                     Sub Category:
                                                 </label>
                                             </div>
@@ -75,7 +75,7 @@ VM Categories
                                     <div class="col-md-4">
                                         <div class="m-form__group m-form__group--inline">
                                             <div class="m-form__label">
-                                                <label class="m-label m-label--single">
+                                                <label class="m-label m-label--single" style="width: 60px;">
                                                     OS Type:
                                                 </label>
                                             </div>
@@ -99,94 +99,45 @@ VM Categories
                         </div>
                     </div>
                     <!--end: Search Form -->
-                    <table class="m-datatable" id="html_table" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>VM Type</th>
-                                <!-- <th>Category</th> -->
-                                <th>Sub Category</th>
-                                <th>VM Function</th>
-                                <th>OS Type</th>
+                    <div class="m_datatable" id="local_data"></div>
+                    <?php
+                        $jsonData = '[{';
+                        foreach($categories as $cat){
+                            $jsonData .= '"Id":'.$cat->Id.',';
+                            $jsonData .= '"VM Type":"'.$cat->MeterTypes.'",';
+                            $jsonData .= '"Sub Category":"'.$cat->MeterSubCategory.'",';
+                            $jsonData .= '"VM Function":"'.$cat->MeterFunction.'",';
+                            $jsonData .= '"OS Type":"'.$cat->OperationSystem.'",';
+                            $jsonData .= '"Cores":"'.$cat->Cores.'",';
+                            $jsonData .= '"GB RAM":"'.$cat->RAM.'",';
+                            $jsonData .= '"Meter Rates":"'.$cat->MeterRates.'",';
+                            $jsonData .= '"Ratio CPU/GBR":"'.number_format($cat->RAM/$cat->Cores, 2, '.', '').'",';
+                            $jsonData .= '"Currency":"'.$currency_code.'",';
+                            $jsonData .= '"Cost":"'.$cat->Cost.'",';
 
-                                <th>Cores</th>
-                                <th>GB RAM</th>
-                                <th>Meter Rates</th>
-                                <th>Ratio CPU/GBR</th>
-                                <th>Currency</th>
-                                <th>Cost</th>
-                                <th>Price</th>
-                                <th>GB/RAM Price</th>
-                                <th>Updated By</th>
-                                <th>Updated</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Content -->
-                            @foreach($categories as $cat)
-                            <tr>
-                                <td>{{$cat->Id}}</td>
-                                <td>{{$cat->MeterTypes}}</td>
-                                <!-- <td>{{$cat->MeterCategory}}</td> -->
-                                <td>{{$cat->MeterSubCategory}}</td>
-                                <td>{{$cat->MeterFunction}}</td>
-                                <td>{{$cat->OperationSystem}}</td>
-                                <td>{{$cat->Cores}}</td>
-                                <td>{{$cat->RAM}}</td>
-                                <td>{{$cat->MeterRates}}</td>
-                                <td>{{number_format($cat->RAM/$cat->Cores, 2, '.', '') }}</td>
-                                <td>{{$currency_code}}</td>
-                                <td>
-                                    {{$cat->Cost}}
-                                    <?php
-                                    
-                                        $cost = 0;
-                                        $totalHoursPerMonth = 744; 
-                                        if($cat->MeterRates != null)
-                                        {
-                                            $arr_rates = explode(";", $cat->MeterRates);
-                                            $rates = explode(":", (string)$arr_rates[0]);
-                                            $cost = $rates[1];
-                                        }
-                                        
-                                        $price = $cost * $totalHoursPerMonth;
-                                        $gbRam_Price = $price / (float)$cat->RAM;
-                                        //{{$cost}}
-                                    ?>
-                                        
-                                </td>
-                                <td>{{number_format($price, 2, '.', '')}}</td>
-                                <td>{{number_format($gbRam_Price, 2, '.', '')}}</td>
-                                
-                                <td>Admin</td>
-                                <td>{{$cat->updated_at}}</td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="First group">
-                                        <button class="btn btn-info btn-sm" 
-                                                data-toggle="modal" 
-                                                data-subcategory="{{$cat->MeterSubCategory}}" 
-                                                data-vmtypes="{{$cat->MeterTypes}}"
-                                                data-vmfunction="{{$cat->MeterFunction}}"
-                                                data-cores="{{$cat->Cores}}"
-                                                data-ram="{{$cat->RAM}}"
-                                                data-ostype="{{$cat->OperationSystem}}"
-                                                data-catid={{$cat->Id}} 
-                                                data-target="#categoriesEdit">
-                                            <i class="la la-file-text-o"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" 
-                                                data-catid={{$cat->Id}} 
-                                                data-toggle="modal" 
-                                                data-target="#categoriesDelete">
-                                            <i class="la la-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            $cost = 0;
+                            $totalHoursPerMonth = 744; 
+                            if($cat->MeterRates != null)
+                            {
+                                $arr_rates = explode(";", $cat->MeterRates);
+                                $rates = explode(":", (string)$arr_rates[0]);
+                                $cost = $rates[1];
+                            }
+                            
+                            $price = $cost * $totalHoursPerMonth;
+                            $gbRam_Price = $price / (float)$cat->RAM;
+
+                            $jsonData .= '"Price":"'.number_format($price, 2, '.', '').'",';
+                            $jsonData .= '"GB/RAM Price":"'.number_format($gbRam_Price, 2, '.', '').'",';
+                            $jsonData .= '"Updated By":"Admin"'.',';
+                            $jsonData .= '"Updated":"'.$cat->updated_at.'"},{';
+                            // $jsonData .= '"Action":'.$action.'},{';
+
+                        }
+                        $jsonData = substr($jsonData, 0, -2);
+                        $jsonData .= ']';
+                     ?>
+                    
                 </div>
                 <div class="panel-footer"></div>
                 
@@ -339,41 +290,124 @@ VM Categories
                         modal.find('.modal-body #cat_id').val(cat_id);
                     });
 
-                    var DatatableHtmlTable = function() {
-                        //== Private functions
-
-                        // demo initializer
-                        var run_htmltable = function() {
-
-                            var datatable = $('.m-datatable').mDatatable({});
+                    var DatatableDataLocal = {
+                        init: function() {
+                            var e, a, i;
+                            e = JSON.parse('<?php echo $jsonData; ?>');
+                            a = $(".m_datatable").mDatatable({
+                                data: {
+                                    type: "local",
+                                    source: e,
+                                    pageSize: 10
+                                },
+                                layout: {
+                                    theme: "default",
+                                    class: "",
+                                    scroll: !1,
+                                    footer: !1
+                                },
+                                sortable: !0,
+                                pagination: !0,
+                                // search: {
+                                //     input: $("#generalSearch")
+                                // },
+                                columns: [{
+                                    field: "VM Type",
+                                    title: "VM Type",
+                                }, {
+                                    field: "Sub Category",
+                                    title: "Sub Category",
+                                    width: 150,
+                                    sortable : true
+                                }, {
+                                    field: "VM Function",
+                                    title: "VM Function",
+                                }, {
+                                    field: "OS Type",
+                                    title: "OS Type",
+                                    width: 80,
+                                }, {
+                                    field: "Cores",
+                                    title: "Cores",
+                                    width: 70,
+                                }, {
+                                    field: "GB RAM",
+                                    title: "GB RAM",
+                                    width: 80,
+                                }, {
+                                    field: "Meter Rates",
+                                    title: "Meter Rates",
+                                }, {
+                                    field: "Ratio CPU/GBR",
+                                    title: "Ratio CPU/GBR",
+                                    width: 150
+                
+                                }, {
+                                    field: "Currency",
+                                    title: "Currency",
+                                }, {
+                                    field: "Cost",
+                                    title: "Cost",
+                                }, {
+                                    field: "Price",
+                                    title: "Price",
+                                }, {
+                                    field: "GB/RAM Price",
+                                    title: "GB/RAM Price",
+                                    width: 150,
+                                }, {
+                                    field: "Updated By",
+                                    title: "Updated By",
+                                }, {
+                                    field: "Updated",
+                                    title: "Updated",
+                                    width: 150
+                                },{
+                                    field: "Action",
+                                    title: "Action",   
+                                    template: function(e, a, i) {
+                                        return  '<div class="btn-group" role="group" aria-label="First group">\
+                                                    <button class="btn btn-info btn-sm" \
+                                                            data-toggle="modal" \
+                                                            data-subcategory="'+e['Sub Category']+'" \
+                                                            data-vmtypes="'+e['VM Type']+'"\
+                                                            data-vmfunction="'+e['VM Function']+'"\
+                                                            data-cores="'+e['Cores']+'"\
+                                                            data-ram="'+e['GB RAM']+'"\
+                                                            data-ostype="'+e['OS Type']+'"\
+                                                            data-catid='+e['Id']+'\
+                                                            data-target="#categoriesEdit">\
+                                                        <i class="la la-file-text-o"></i>\
+                                                    </button>\
+                                                    <button class="btn btn-danger btn-sm" \
+                                                            data-catid='+e['Id']+' \
+                                                            data-toggle="modal" \
+                                                            data-target="#categoriesDelete">\
+                                                        <i class="la la-trash"></i>\
+                                                    </button>\
+                                                </div>';
+                                    }
+                                }]
+                            });
+                            i = a.getDataSourceQuery();
 
                             $('#m_form_vmtype').on('change', function() {
-                                datatable.search($(this).val().toLowerCase(), 'VM Type');
+                                a.search($(this).val().toLowerCase(), 'VM Type');
                             });
 
                             $('#m_form_subcategory').on('change', function() {
-                                datatable.search($(this).val().toLowerCase(), 'Sub Category');
+                                a.search($(this).val().toLowerCase(), 'Sub Category');
                             });
 
                             $('#m_form_ostype').on('change', function() {
-                                datatable.search($(this).val().toLowerCase(), 'OS Type');
+                                a.search($(this).val().toLowerCase(), 'OS Type');
                             });
 
                             $('#m_form_vmtype, #m_form_subcategory, #m_form_ostype').selectpicker();
-
-                        };
-
-                        return {
-                            //== Public functions
-                            init: function() {
-                                // init dmeo
-                                run_htmltable();
-                            },
-                        };
-                    }();
-
+                        }
+                    };
                     jQuery(document).ready(function() {
-                        DatatableHtmlTable.init();
+                        DatatableDataLocal.init()
                     });
                 });
             </script>

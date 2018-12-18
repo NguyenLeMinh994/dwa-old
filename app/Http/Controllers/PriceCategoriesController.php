@@ -106,9 +106,9 @@ class PriceCategoriesController extends Controller
         $json_Ev3_data = json_encode($chart_Ev3);
 
         //filter data
-        $vm_type_filter = DB::table('view_vm_categories')->select('MeterTypes')->groupBy('MeterTypes')->get();
-        $sub_category_filter = DB::table('view_vm_categories')->select('MeterSubCategory')->groupBy('MeterSubCategory')->get();
-        $os_type_filter = DB::table('view_vm_categories')->select('OperationSystem')->groupBy('OperationSystem')->get();
+        $vm_type_filter = DB::table('price_categories')->select('MeterTypes')->groupBy('MeterTypes')->get();
+        $sub_category_filter = DB::table('price_categories')->select('MeterSubCategory')->groupBy('MeterSubCategory')->get();
+        $os_type_filter = DB::table('price_categories')->select('OperationSystem')->groupBy('OperationSystem')->get();
 
         return view("price-categories", compact(['categories', 'region' ,'json_Dv3_data', 'json_Ev3_data', 'currency_rate', 'currency_code', 'vm_type_filter', 'sub_category_filter', 'os_type_filter']));
     }

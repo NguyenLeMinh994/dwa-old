@@ -108,20 +108,16 @@ Data from Azure Rate Card API
 <script type="text/javascript">
 
 var DatatableRemoteAjax = function() {
-  //== Private functions
 
-  // basic demo
-  var demo = function() {
+  var loadAjaxTable = function() {
 
     var datatable = $('.m_datatable').mDatatable({
-      // datasource definition
       data: {
         type: 'remote',
         source: {
           read: {
             url: '/rates_resource?_token={{ csrf_token() }}',
             map: function(raw) {
-              // sample data mapping
               var dataSet = raw;
               if (typeof raw.data !== 'undefined') {
                 dataSet = raw.data;
@@ -135,30 +131,22 @@ var DatatableRemoteAjax = function() {
         serverFiltering: true,
         serverSorting: true,
       },
-
-      // layout definition
       layout: {
         scroll: false,
         footer: false
       },
-
-      // column sorting
       sortable: true,
 
       pagination: true,
 
       toolbar: {
-        // toolbar items
         items: {
-          // pagination
           pagination: {
-            // page size select
             pageSizeSelect: [10, 20, 30, 50, 100],
           },
         },
       },
 
-      // columns definition
       columns: [
         {
           field: 'MeterId',
@@ -231,9 +219,8 @@ var DatatableRemoteAjax = function() {
   };
 
   return {
-    // public functions
     init: function() {
-      demo();
+      loadAjaxTable();
     },
   };
 }();

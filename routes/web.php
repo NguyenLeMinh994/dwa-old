@@ -75,7 +75,6 @@ Route::group(['middleware' => 'localization', 'prefix' => Session::get('locale')
         Route::get('rates','RatecardController@index');
         Route::get('virtual-machine','RatecardController@virtualMachine');
         Route::post('rates_resource','RatecardController@getResourceRateCard');
-        Route::get('rates_resource','RatecardController@getResourceRateCard');
 
         Route::get('scenario1-calculation','ScenarioCalculationController@viewScenario1');
         Route::get('scenario2-calculation','ScenarioCalculationController@viewScenario2');

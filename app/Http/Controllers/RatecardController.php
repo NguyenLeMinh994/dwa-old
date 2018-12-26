@@ -37,7 +37,7 @@ class RatecardController extends Controller
         if (is_array($query)) {
             $query = array_filter($query);
             foreach ($query as $key => $val) {
-                $meters = $meters->where(''.$key.'', 'like', '%'.$val.'%');
+                $meters = $meters->where($key, $val);
             }
             $meters = $meters->get();
         }else{

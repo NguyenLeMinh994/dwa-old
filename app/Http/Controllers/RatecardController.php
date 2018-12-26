@@ -39,11 +39,9 @@ class RatecardController extends Controller
             foreach ($query as $key => $val) {
                 $meters = $meters->where($key, $val);
             }
-            $meters = $meters->get();
-        }else{
-            $meters = $meters->get();
         }
-        
+
+        $meters = $meters->get();
 
         $data = $alldata = json_decode(json_encode($meters));
 

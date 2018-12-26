@@ -27,30 +27,25 @@ class RatecardController extends Controller
     }
 
     public function getResourceRateCard(){
-        $meters = DB::table('meters')->get();
-
-        $data = $alldata = json_decode(json_encode($meters));
+        $meters = DB::table('meters');
 
         $datatable = array_merge(['pagination' => [], 'sort' => [], 'query' => []], $_REQUEST);
 
-        // search filter by keywords
-        $filter = isset($datatable['query']['generalSearch']) && is_string($datatable['query']['generalSearch'])
-            ? $datatable['query']['generalSearch'] : '';
-        if ( ! empty($filter)) {
-            $data = array_filter($data, function ($a) use ($filter) {
-                return (boolean)preg_grep("/$filter/i", (array)$a);
-            });
-            unset($datatable['query']['generalSearch']);
-        }
-
         // filter by field query
         $query = isset($datatable['query']) && is_array($datatable['query']) ? $datatable['query'] : null;
+
         if (is_array($query)) {
             $query = array_filter($query);
             foreach ($query as $key => $val) {
-                $data = $this->list_filter($data, [$key => $val]);
+                $meters = $meters->where(''.$key.'', 'like', '%'.$val.'%');
             }
+            $meters = $meters->get();
+        }else{
+            $meters = $meters->get();
         }
+        
+
+        $data = $alldata = json_decode(json_encode($meters));
 
         $sort  = ! empty($datatable['sort']['sort']) ? $datatable['sort']['sort'] : 'asc';
         $field = ! empty($datatable['sort']['field']) ? $datatable['sort']['field'] : 'RecordID';

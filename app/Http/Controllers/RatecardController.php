@@ -33,40 +33,25 @@ class RatecardController extends Controller
 
         // filter by field query
         $query = isset($datatable['query']) && is_array($datatable['query']) ? $datatable['query'] : null;
-
         if (is_array($query)) {
             $query = array_filter($query);
             foreach ($query as $key => $val) {
                 $meters = $meters->where($key, $val);
             }
         }
-
-        $meters = $meters->get();
-
-        $data = $alldata = json_decode(json_encode($meters));
-
+        
+        // sort
         $sort  = ! empty($datatable['sort']['sort']) ? $datatable['sort']['sort'] : 'asc';
-        $field = ! empty($datatable['sort']['field']) ? $datatable['sort']['field'] : 'RecordID';
+        $field = ! empty($datatable['sort']['field']) ? $datatable['sort']['field'] : 'MeterRegion';
+        $meters->orderBy($field, $sort);
+        
 
         $meta    = [];
         $page    = ! empty($datatable['pagination']['page']) ? (int)$datatable['pagination']['page'] : 1;
         $perpage = ! empty($datatable['pagination']['perpage']) ? (int)$datatable['pagination']['perpage'] : -1;
 
         $pages = 1;
-        $total = count($data); // total items in array
-
-        // sort
-        usort($data, function ($a, $b) use ($sort, $field) {
-            if ( ! isset($a->$field) || ! isset($b->$field)) {
-                return false;
-            }
-
-            if ($sort === 'asc') {
-                return $a->$field > $b->$field ? true : false;
-            }
-
-            return $a->$field < $b->$field ? true : false;
-        });
+        $total = $meters->count();
 
         // $perpage 0; get all data
         if ($perpage > 0) {
@@ -78,8 +63,11 @@ class RatecardController extends Controller
                 $offset = 0;
             }
 
-            $data = array_slice($data, $offset, $perpage, true);
+            $data = $meters->offset($offset)->limit($perpage);
         }
+
+        $meters = $meters->get();
+        $data = $alldata = json_decode(json_encode($meters));
 
         $meta = [
             'page'    => $page,

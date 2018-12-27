@@ -63,7 +63,7 @@ class RatecardController extends Controller
                 $offset = 0;
             }
 
-            $data = $meters->offset($offset)->limit($perpage);
+            $meters = $meters->offset($offset)->limit($perpage);
         }
 
         $meters = $meters->get();

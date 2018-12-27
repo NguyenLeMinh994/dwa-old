@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\meters;
-use App\ListUltilAjaxTable;
 
 class RatecardController extends Controller
 {
@@ -100,17 +99,6 @@ class RatecardController extends Controller
 
         echo json_encode($result, JSON_PRETTY_PRINT);
         exit();
-    }
-
-    public function list_filter( $list, $args = array(), $operator = 'AND' )
-    {
-        if ( ! is_array( $list ) ) {
-            return array();
-        }
-
-        $util = new ListUltilAjaxTable( $list );
-
-        return $util->filter( $args, $operator );
     }
 
     /**

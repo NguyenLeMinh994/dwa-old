@@ -83,12 +83,6 @@ class RatecardController extends Controller
             }, $alldata);
         }
 
-
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
-
         $result = [
             'meta' => $meta + [
                     'sort'  => $sort,
@@ -97,8 +91,7 @@ class RatecardController extends Controller
             'data' => $data,
         ];
 
-        echo json_encode($result, JSON_PRETTY_PRINT);
-        exit();
+        return response()->json($result);
     }
 
     /**

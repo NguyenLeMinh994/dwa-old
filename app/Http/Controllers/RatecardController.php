@@ -97,7 +97,13 @@ class RatecardController extends Controller
     function getSubCateByCate(){
         $category = request('cate');
 
-        $results = DB::table('meters')->select('MeterSubCategory')->where('MeterCategory', $category)->groupBy('MeterSubCategory')->get();
+        if ($category != '') {
+            $results = DB::table('meters')->select('MeterSubCategory')->where('MeterCategory', $category);
+            $results = $results->where('MeterSubCategory', '<>', '')->groupBy('MeterSubCategory')->get();
+        }else{
+            $results = DB::table('meters')->select('MeterSubCategory')->where('MeterSubCategory', '<>', '')->groupBy('MeterSubCategory')->get();
+        }
+        
         
         return response()->json(['results' => $results]);
     }

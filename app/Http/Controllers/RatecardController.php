@@ -94,6 +94,14 @@ class RatecardController extends Controller
         return response()->json($result);
     }
 
+    function getSubCateByCate(){
+        $category = request('cate');
+
+        $results = DB::table('meters')->select('MeterSubCategory')->where('MeterCategory', $category)->groupBy('MeterSubCategory')->get();
+        
+        return response()->json(['results' => $results]);
+    }
+
     /**
      * Display a listing of the Virtual Machine selected by reseller.
      *

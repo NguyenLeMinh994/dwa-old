@@ -204,6 +204,7 @@ var DatatableRemoteAjax = function() {
 
     $('#m_form_category').on('change', function() {
       datatable.search($(this).val(), 'MeterCategory');
+      getSubCateByCate($(this).val());
     });
 
     $('#m_form_subcategory').on('change', function() {
@@ -215,6 +216,24 @@ var DatatableRemoteAjax = function() {
     });
 
     $('#m_form_region, #m_form_category, #m_form_subcategory, #m_form_name').selectpicker();
+
+    function getSubCateByCate(category){
+      $.ajax({
+        url: "rates_subcate?cate="+category+"&_token={{ csrf_token() }}",
+        complete: function( response ) {
+          var data = JSON.parse(response.responseText);
+          // var result = data.results;
+          // console.log(data.results);
+          var subcates = '<option value="">All</option>';
+          $.each(data.results, function( index, value ) {
+            console.log( value['MeterSubCategory'] );
+            subcates += '<option value="'+value['MeterSubCategory']+'">'+value['MeterSubCategory']+'</option>';
+          });
+          $('#m_form_subcategory').html(subcates);
+          $('#m_form_subcategory').selectpicker();
+        }
+      });
+    }
 
   };
 

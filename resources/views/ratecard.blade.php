@@ -222,8 +222,6 @@ var DatatableRemoteAjax = function() {
         url: "rates_subcate?cate="+category+"&_token={{ csrf_token() }}",
         complete: function( response ) {
           var data = JSON.parse(response.responseText);
-          // var result = data.results;
-          // console.log(data.results);
           var subcates = '<option value="">All</option>';
           $.each(data.results, function( index, value ) {
             if (value['MeterSubCategory'] != '') 

@@ -224,8 +224,7 @@ var DatatableRemoteAjax = function() {
           var data = JSON.parse(response.responseText);
           var subcates = '<option value="">All</option>';
           $.each(data.results, function( index, value ) {
-            if (value['MeterSubCategory'] != '') 
-              subcates += '<option value="'+value['MeterSubCategory']+'">'+value['MeterSubCategory']+'</option>';
+            subcates += '<option value="'+value['MeterSubCategory']+'">'+value['MeterSubCategory']+'</option>';
           });
           $('#m_form_subcategory').html(subcates);
           // $('#m_form_subcategory').selectpicker('refresh');

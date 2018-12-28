@@ -64,24 +64,33 @@ class CurrentCostStructure extends Model
 
         $total_of_gb_in_use = $customers_internal_memory_GB_RAM_utilization_unit_price['total_used_GB_RAM_vms']['total_GB_RAM'];
 
-        $ratio_over_committed_cpu = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer
-                                    / (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer ;
+        $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION = 1;
+        if((float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer > 0)
+            $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer;
 
+        $GEN_INFRA_NUMBER_LOGICAL_CPU = 1;
+        if((float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer > 0)
+            $GEN_INFRA_NUMBER_LOGICAL_CPU = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer;
+
+        $ratio_over_committed_cpu = $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION / $GEN_INFRA_NUMBER_LOGICAL_CPU;
+            
+        
         $number_of_gbram_per_vm = $total_of_gb_in_use / $num_of_reported_vms;
         $ratio_cpu_gbram = $total_of_gb_in_use / $num_of_cpus_in_use;
 
+
         //return data
         $summary_of_the_inputs = array();
-        $summary_of_the_inputs['total_indirect_cost'] = $total_indirect_cost;
-        $summary_of_the_inputs['total_storage_cost'] = $total_storage_cost;
-        $summary_of_the_inputs['total_compute_cost'] = $total_compute_cost;
-        $summary_of_the_inputs['total_os_lisence_cost'] = $total_os_lisence_cost;
-        $summary_of_the_inputs['num_of_reported_vms'] = $num_of_reported_vms;
-        $summary_of_the_inputs['num_of_cpus_in_use'] = $num_of_cpus_in_use;
-        $summary_of_the_inputs['total_of_gb_in_use'] = $total_of_gb_in_use;
-        $summary_of_the_inputs['ratio_over_committed_cpu'] = $ratio_over_committed_cpu;
-        $summary_of_the_inputs['number_of_gbram_per_vm'] =  $number_of_gbram_per_vm;
-        $summary_of_the_inputs['ratio_cpu_gbram'] = $ratio_cpu_gbram;
+        $summary_of_the_inputs['total_indirect_cost']       = $total_indirect_cost;
+        $summary_of_the_inputs['total_storage_cost']        = $total_storage_cost;
+        $summary_of_the_inputs['total_compute_cost']        = $total_compute_cost;
+        $summary_of_the_inputs['total_os_lisence_cost']     = $total_os_lisence_cost;
+        $summary_of_the_inputs['num_of_reported_vms']       = $num_of_reported_vms;
+        $summary_of_the_inputs['num_of_cpus_in_use']        = $num_of_cpus_in_use;
+        $summary_of_the_inputs['total_of_gb_in_use']        = $total_of_gb_in_use;
+        $summary_of_the_inputs['ratio_over_committed_cpu']  = $ratio_over_committed_cpu;
+        $summary_of_the_inputs['number_of_gbram_per_vm']    =  $number_of_gbram_per_vm;
+        $summary_of_the_inputs['ratio_cpu_gbram']           = $ratio_cpu_gbram;
         
         return $summary_of_the_inputs;
     }

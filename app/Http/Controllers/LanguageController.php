@@ -46,7 +46,15 @@ class LanguageController extends Controller
         $customer_setup_config = session('customer_setup_config');
         
         if ($request->currency != $customer_setup_config['currency']['currency_code']){
-            $customer_setup_config['currency']['currency_rate'] = $valuta_model->changeCurrentRate($request->currency);
+            $currency = $valuta_model->changeCurrentRate($request->currency);
+            
+            $customer_setup_config['currency']['currency_rate'] = $currency->rate;
+            
+            if($currency->currency_symbol != null && $currency->currency_symbol != '')
+                $customer_setup_config['currency']['currency_symbol'] = $currency->currency_symbol;
+            else
+                $customer_setup_config['currency']['currency_symbol'] = $currency->currency_code;
+
             $chkresetChartImage = $this->resetChartImageBasedUID($customer_case);
         }
         $customer_setup_config['currency']['currency_code'] = $request->currency;

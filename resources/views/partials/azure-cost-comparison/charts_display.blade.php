@@ -57,7 +57,7 @@
     $chart10[] = $windows_data;
     $chart10[] = $linux_data;
     $chart10[] = $total_data;
-    $chart10_json = json_encode($chart10);
+    $chart10_json = json_encode($chart10); //dd($chart10_json);
 
     $chart8 = array();
     $chart8[] = $primary_storage_LRS;
@@ -99,20 +99,20 @@
 
     let currency_symbol = '';
 
-    if ('{!!$currency_code!!}' == 'USD'){
-        currency_symbol = '$';
-    }
-    else if ('{!!$currency_code!!}' == 'EUR'){
-        currency_symbol = '€';
-    }
-    else if ('{!!$currency_code!!}' == 'GBP'){
-        currency_symbol = '£';
-    }
-    else if ('{!!$currency_code!!}' == 'DKK'){
-        currency_symbol = 'kr. ';
-    }
-    else
-        currency_symbol = '{!!$currency_code!!} ';
+    // if ('{!!$currency_code!!}' == 'USD'){
+    //     currency_symbol = '$';
+    // }
+    // else if ('{!!$currency_code!!}' == 'EUR'){
+    //     currency_symbol = '€';
+    // }
+    // else if ('{!!$currency_code!!}' == 'GBP'){
+    //     currency_symbol = '£';
+    // }
+    // else if ('{!!$currency_code!!}' == 'DKK'){
+    //     currency_symbol = 'kr. ';
+    // }
+    // else
+        currency_symbol = '{!!$currency_symbol!!} ';
 
     // $(document).ready(function() {
     //     //save chart images to database

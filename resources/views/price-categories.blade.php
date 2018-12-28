@@ -25,75 +25,99 @@ VM Categories
                     <!--begin: Search Form -->
                     <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
                         <div class="row align-items-center">
-                            <div class="col-xl-8 order-2 order-xl-1">
+                            <div class="col-xl-12 order-2 order-xl-1">
                                 <div class="form-group m-form__group row align-items-center">
-                                    <div class="col-md-4">
-                                        <div class="m-form__group m-form__group--inline">
-                                            <div class="m-form__label">
-                                                <label style="width: 60px;">
-                                                    VM Type:
-                                                </label>
+                                        <div class="col-md-4">
+                                            <div class="m-form__group m-form__group--inline">
+                                                <div class="m-form__label">
+                                                    <label style="width: 60px;">
+                                                        VM Type:
+                                                    </label>
+                                                </div>
+                                                <div class="m-form__control">
+                                                    <select class="form-control m-bootstrap-select" id="m_form_vmtype">
+                                                        <option value="">
+                                                            All
+                                                        </option>
+                                                        @foreach($vm_type_filter as $vm_type)
+                                                        <option value="{{$vm_type->MeterTypes}}">
+                                                            {{$vm_type->MeterTypes}}
+                                                        </option>
+                                                        @endforeach
+                                                        
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="m-form__control">
-                                                <select class="form-control m-bootstrap-select" id="m_form_vmtype">
-                                                    <option value="">
-                                                        All
-                                                    </option>
-                                                    @foreach($vm_type_filter as $vm_type)
-                                                    <option value="{{$vm_type->MeterTypes}}">
-                                                        {{$vm_type->MeterTypes}}
-                                                    </option>
-                                                    @endforeach
-                                                    
-                                                </select>
-                                            </div>
+                                            <div class="d-md-none m--margin-bottom-10"></div>
                                         </div>
-                                        <div class="d-md-none m--margin-bottom-10"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="m-form__group m-form__group--inline">
-                                            <div class="m-form__label">
-                                                <label class="m-label m-label--single" style="width: 99px;">
-                                                    Sub Category:
-                                                </label>
+                                        <div class="col-md-4">
+                                            <div class="m-form__group m-form__group--inline">
+                                                <div class="m-form__label">
+                                                    <label style="width: 100px;">
+                                                        VM Function:
+                                                    </label>
+                                                </div>
+                                                <div class="m-form__control">
+                                                    <select class="form-control m-bootstrap-select" id="m_form_vmfunction">
+                                                        <option value="">
+                                                            All
+                                                        </option>
+                                                        @foreach($vm_function_filter as $vm_type)
+                                                        <option value="{{$vm_type->MeterFunction}}">
+                                                            {{$vm_type->MeterFunction}}
+                                                        </option>
+                                                        @endforeach
+                                                        
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="m-form__control">
-                                                <select class="form-control m-bootstrap-select" id="m_form_subcategory">
-                                                    <option value="">
-                                                        All
-                                                    </option>
-                                                    @foreach($sub_category_filter as $sub_category)
-                                                    <option value="{{$sub_category->MeterSubCategory}}">
-                                                        {{$sub_category->MeterSubCategory}}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            <div class="d-md-none m--margin-bottom-10"></div>
                                         </div>
-                                        <div class="d-md-none m--margin-bottom-10"></div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="m-form__group m-form__group--inline">
-                                            <div class="m-form__label">
-                                                <label class="m-label m-label--single" style="width: 60px;">
-                                                    OS Type:
-                                                </label>
+                                        <!--
+                                        <div class="col-md-3">
+                                            <div class="m-form__group m-form__group--inline">
+                                                <div class="m-form__label">
+                                                    <label class="m-label m-label--single" style="width: 99px;">
+                                                        Sub Category:
+                                                    </label>
+                                                </div>
+                                                <div class="m-form__control">
+                                                    <select class="form-control m-bootstrap-select" id="m_form_subcategory">
+                                                        <option value="">
+                                                            All
+                                                        </option>
+                                                        @foreach($sub_category_filter as $sub_category)
+                                                        <option value="{{$sub_category->MeterSubCategory}}">
+                                                            {{$sub_category->MeterSubCategory}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="m-form__control">
-                                                <select class="form-control m-bootstrap-select" id="m_form_ostype">
-                                                    <option value="">
-                                                        All
-                                                    </option>
-                                                    @foreach($os_type_filter as $os_type)
-                                                    <option value="{{$os_type->OperationSystem}}">
-                                                        {{$os_type->OperationSystem}}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="d-md-none m--margin-bottom-10"></div>
+                                        </div> -->
+                                        <div class="col-md-4">
+                                            <div class="m-form__group m-form__group--inline">
+                                                <div class="m-form__label">
+                                                    <label class="m-label m-label--single" style="width: 60px;">
+                                                        OS Type:
+                                                    </label>
+                                                </div>
+                                                <div class="m-form__control">
+                                                    <select class="form-control m-bootstrap-select" id="m_form_ostype">
+                                                        <option value="">
+                                                            All
+                                                        </option>
+                                                        @foreach($os_type_filter as $os_type)
+                                                        <option value="{{$os_type->OperationSystem}}">
+                                                            {{$os_type->OperationSystem}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
+                                            <div class="d-md-none m--margin-bottom-10"></div>
                                         </div>
-                                        <div class="d-md-none m--margin-bottom-10"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -314,6 +338,7 @@ VM Categories
                                 columns: [{
                                     field: "VM Type",
                                     title: "VM Type",
+                                    width: 90,
                                 }, {
                                     field: "Sub Category",
                                     title: "Sub Category",
@@ -329,7 +354,7 @@ VM Categories
                                 }, {
                                     field: "Cores",
                                     title: "Cores",
-                                    width: 70,
+                                    width: 80,
                                 }, {
                                     field: "GB RAM",
                                     title: "GB RAM",
@@ -337,24 +362,28 @@ VM Categories
                                 }, {
                                     field: "Meter Rates",
                                     title: "Meter Rates",
+                                    width: 130,
                                 }, {
                                     field: "Ratio CPU/GBR",
                                     title: "Ratio CPU/GBR",
-                                    width: 150
+                                    width: 130
                 
                                 }, {
                                     field: "Currency",
                                     title: "Currency",
+                                    width: 90
                                 }, {
                                     field: "Cost",
                                     title: "Cost",
+                                    width: 70
                                 }, {
                                     field: "Price",
                                     title: "Price",
+                                    width: 70
                                 }, {
                                     field: "GB/RAM Price",
                                     title: "GB/RAM Price",
-                                    width: 150,
+                                    width: 100,
                                 }, {
                                     field: "Updated By",
                                     title: "Updated By",
@@ -394,16 +423,19 @@ VM Categories
                             $('#m_form_vmtype').on('change', function() {
                                 a.search($(this).val().toLowerCase(), 'VM Type');
                             });
-
-                            $('#m_form_subcategory').on('change', function() {
-                                a.search($(this).val().toLowerCase(), 'Sub Category');
+                            $('#m_form_vmfunction').on('change', function() {
+                                a.search($(this).val().toLowerCase(), 'VM Function');
                             });
+
+                            // $('#m_form_subcategory').on('change', function() {
+                            //     a.search($(this).val().toLowerCase(), 'Sub Category');
+                            // });
 
                             $('#m_form_ostype').on('change', function() {
                                 a.search($(this).val().toLowerCase(), 'OS Type');
                             });
 
-                            $('#m_form_vmtype, #m_form_subcategory, #m_form_ostype').selectpicker();
+                            $('#m_form_vmtype, #m_form_vmfunction, #m_form_ostype').selectpicker();
                         }
                     };
                     jQuery(document).ready(function() {

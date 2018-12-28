@@ -107,10 +107,11 @@ class PriceCategoriesController extends Controller
 
         //filter data
         $vm_type_filter = DB::table('price_categories')->select('MeterTypes')->groupBy('MeterTypes')->get();
+        $vm_function_filter = DB::table('price_categories')->select('MeterFunction')->groupBy('MeterFunction')->get();
         $sub_category_filter = DB::table('price_categories')->select('MeterSubCategory')->groupBy('MeterSubCategory')->get();
         $os_type_filter = DB::table('price_categories')->select('OperationSystem')->groupBy('OperationSystem')->get();
 
-        return view("price-categories", compact(['categories', 'region' ,'json_Dv3_data', 'json_Ev3_data', 'currency_rate', 'currency_code', 'vm_type_filter', 'sub_category_filter', 'os_type_filter']));
+        return view("price-categories", compact(['categories', 'region' ,'json_Dv3_data', 'json_Ev3_data', 'currency_rate', 'currency_code', 'vm_type_filter', 'vm_function_filter', 'sub_category_filter', 'os_type_filter']));
     }
 
     /**

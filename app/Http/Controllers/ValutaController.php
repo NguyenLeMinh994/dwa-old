@@ -132,7 +132,7 @@ class ValutaController extends Controller
      */
     public function autocomplete(Request $request)
     {
-         $data = Valuta::select("currency_code", "currency_name")
+         $data = Valuta::select("currency_code", "currency_name", "currency_symbol")
                  ->where("currency_code", "LIKE", "%{$request->input('query')}%")
                  ->orWhere("currency_name", "LIKE", "%{$request->input('query')}%")
 				 ->where("status", 'ACTIVED')

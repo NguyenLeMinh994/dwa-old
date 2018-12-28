@@ -34,8 +34,8 @@ class AzureQualityServicesController extends Controller
         $customer_currency_rate = 1;
 
         $valuta_model = new Valuta();
-        $customer_currency_rate = $valuta_model->changeCurrentRate($survey_info['CUSTOMER_CURRENCY']->answer);
-
+        $currency = $valuta_model->changeCurrentRate($survey_info['CUSTOMER_CURRENCY']->answer);
+        $customer_currency_rate = $currency->rate;
         //return to view
         return view("azure-quality-services", compact(['quality_of_services', 'customer_currency_code', 'customer_currency_rate']));
     }

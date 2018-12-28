@@ -20,15 +20,28 @@ class Valuta extends Model
         'updated_at'
     ];
 
+    // public function changeCurrentRate($currencyCode)
+    // {
+    //     $currencyRate = DB::table('currencies_rates')
+    //                         ->where('currency_code', $currencyCode)
+    //                         ->where('status', 'ACTIVED')
+    //                         ->get();
+    //     //dd($currencyRate);
+    //     if(isset($currencyRate[0]->rate))
+    //         return $currencyRate[0]->rate;
+    //     else
+    //         abort(406, 'Sorry, customer currency '.$currencyCode.' is not supported. Please go back to portal to recheck again');
+    // }
+
     public function changeCurrentRate($currencyCode)
     {
-        $currencyRate = DB::table('currencies_rates')
+        $currency = DB::table('currencies_rates')
                             ->where('currency_code', $currencyCode)
-                            //->where('status', 'ACTIVED')
-                            ->get();
+                            ->where('status', 'ACTIVED')
+                            ->first();
         //dd($currencyRate);
-        if(isset($currencyRate[0]->rate))
-            return $currencyRate[0]->rate;
+        if(isset($currency->rate))
+            return $currency;
         else
             abort(406, 'Sorry, customer currency '.$currencyCode.' is not supported. Please go back to portal to recheck again');
     }

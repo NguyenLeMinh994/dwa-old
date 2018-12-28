@@ -52,7 +52,7 @@
             },
             "graphs": [{
                 "alphaField": "alpha",
-                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:12px; font-weight:bold'>"+currency_symbol+"[[value]]</span> [[additional]]</span>",
                 "fillAlphas": 0.8,
                 "title": "CPU/GBR Ratio",
                 "type": "column",
@@ -60,7 +60,7 @@
             },{
                 "id": "graph2",
                 "lineColor": "#fddc33",
-                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:12px; font-weight:bold'>"+currency_symbol+"[[value]]</span> [[additional]]</span>",
                 "bullet": "round",
                 "lineThickness": 2,
                 "bulletSize": 7,
@@ -75,7 +75,7 @@
             },{
                 "id": "graph3",
                 "lineColor": "#85c5e3",
-                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:20px;'>[[value]]</span> [[additional]]</span>",
+                "balloonText": "<span style='font-size:12px;'>[[title]] in [[category]]:<br><span style='font-size:12px; font-weight:bold'>"+currency_symbol+"[[value]]</span> [[additional]]</span>",
                 "bullet": "round",
                 "lineThickness": 2,
                 "bulletSize": 7,
@@ -94,6 +94,13 @@
                     "labelWidth": 100,
                     "valueWidth": 0,
             },
+            "valueAxes": [
+                {
+                    "minimum": 0,
+                    "minMaxMultiplier": 1.2,
+                    "labelFunction" : formatValue
+                }
+            ],
             "listeners": [
             {
                 "event": "animationFinished",
@@ -118,9 +125,9 @@
                 "decimalSeparator": ".",
                 "thousandsSeparator": ","
             },
-              "responsive": {
-                    "enabled": true
-                },
+            "responsive": {
+                "enabled": true
+            },
             "allLabels": [{
                 "size":14,
                 "bold":true,
@@ -131,6 +138,13 @@
                 "width": "100%",
                 "align": "center"
             }],
+            "valueAxes": [
+                {
+                    "minimum": 0,
+                    "minMaxMultiplier": 1.2,
+                    "labelFunction" : formatValue
+                }
+            ],
             "categoryField": "MeterTypes",
             "startDuration": 0.5,
             "graphs": graphsData,
@@ -249,9 +263,9 @@
 
 
     //VM categories Charts
-    function formatValue(value, formattedValue, valueAxis){
-        return currency_symbol + value;
-    }
+    // function formatValue(value, formattedValue, valueAxis){
+    //     return currency_symbol + value;
+    // }
 
     function generateChart(chartDiv, chartLabel, chartData)
     {

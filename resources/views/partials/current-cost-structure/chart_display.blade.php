@@ -22,20 +22,20 @@
 
         let currency_symbol = '';
 
-        if ('{!!$currency_code!!}' == 'USD'){
-            currency_symbol = '$';
-        }
-        else if ('{!!$currency_code!!}' == 'EUR'){
-            currency_symbol = '€';
-        }
-        else if ('{!!$currency_code!!}' == 'GBP'){
-            currency_symbol = '£';
-        }
-        else if ('{!!$currency_code!!}' == 'DKK'){
-            currency_symbol = 'kr. ';
-        }
-        else
-            currency_symbol = '{!!$currency_code!!}';
+        // if ('{!!$currency_code!!}' == 'USD'){
+        //     currency_symbol = '$';
+        // }
+        // else if ('{!!$currency_code!!}' == 'EUR'){
+        //     currency_symbol = '€';
+        // }
+        // else if ('{!!$currency_code!!}' == 'GBP'){
+        //     currency_symbol = '£';
+        // }
+        // else if ('{!!$currency_code!!}' == 'DKK'){
+        //     currency_symbol = 'kr. ';
+        // }
+        // else
+            currency_symbol = '{!!$currency_symbol!!}';
 
         $(document).ready(function() {
             mApp.block("#main-content", {
@@ -51,7 +51,7 @@
         {
             if(chart14_base64_data == null) return;
             if(chart16_base64_data == null) return;
-            if(chart11_base64_data == null) return;
+            // if(chart11_base64_data == null) return;
 
             if(chart1_base64_data == null) return;
             if(chart7_base64_data == null) return;
@@ -100,12 +100,14 @@
                     '13_3'   : chart_base64_Ev3_data,
                     '22_1'   : chart_base64_Dv3_data
                 },
-                success: function(data) { mApp.unblock("#main-content");}
+                success: function(data) { 
+                    mApp.unblock("#main-content");
+                }
             });
         }
 
         function formatValue(value, formattedValue, valueAxis){
-            return currency_symbol+numeral(value).format('0,0');
+            return currency_symbol + ' ' + numeral(value).format('0,0');
         }
 
         function captureChartImages(event){

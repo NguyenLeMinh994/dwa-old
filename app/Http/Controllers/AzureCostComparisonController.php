@@ -36,11 +36,13 @@ class AzureCostComparisonController extends Controller
         
         $this->currency_rate    = $customer_setup_config['currency']['currency_rate'];
         $this->currency_code    = $customer_setup_config['currency']['currency_code'];
+        $this->currency_symbol  = $customer_setup_config['currency']['currency_symbol'];
         $this->region           = $customer_setup_config['azure_locale'];
 
         $region                 = $this->region;
         $currency_rate          = $this->currency_rate;
         $currency_code          = $this->currency_code;
+        $currency_symbol        = $this->currency_symbol;
         $customer_case_id       = $survey_info['case_id'];
         
         $azureCalculation = new AzureCostComparison();
@@ -74,7 +76,7 @@ class AzureCostComparisonController extends Controller
         $calculations_data['comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost'] = $comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost;
         
         //return to view
-        return view("azure-cost-comparison", compact(['survey_info', 'customer_case_id', 'currency_rate', 'currency_code', 'calculations_data', 'calculations_azure']));
+        return view("azure-cost-comparison", compact(['survey_info', 'customer_case_id', 'currency_rate', 'currency_code', 'currency_symbol', 'calculations_data', 'calculations_azure']));
     }
 
     private function updateChartData($calculations_data)
@@ -100,19 +102,18 @@ class AzureCostComparisonController extends Controller
         $azure_total_linux_cost = $cost_price_of_customer_required_infrastructure['total_azure_net_cost']['linux'];
         $azure_vms_under_ASR_cost = $cost_price_of_customer_required_infrastructure['vms_under_ASR']['azure_net_cost'];
 
-
         $windows_data = array();
         $windows_data['customer_cost']  = $customer_total_windows_cost * $currency_rate;
         $windows_data['azure_cost']     = $azure_total_windows_cost * $currency_rate;
         $windows_data['cost_type']      = 'All Windows OS';
 
-        $linux_data['customer_cost']  = $customer_total_linux_cost * $currency_rate;
-        $linux_data['azure_cost']     = $azure_total_linux_cost * $currency_rate;
-        $linux_data['cost_type']      = 'All Linux OS';
+        $linux_data['customer_cost']    = $customer_total_linux_cost * $currency_rate;
+        $linux_data['azure_cost']       = $azure_total_linux_cost * $currency_rate;
+        $linux_data['cost_type']        = 'All Linux OS';
 
-        $total_data['customer_cost']  = $linux_data['customer_cost'] + $windows_data['customer_cost'];
-        $total_data['azure_cost']     = $linux_data['azure_cost'] + $windows_data['azure_cost'];
-        $total_data['cost_type']      = 'Total Cost Compared';
+        $total_data['customer_cost']    = $linux_data['customer_cost'] + $windows_data['customer_cost'];
+        $total_data['azure_cost']       = $linux_data['azure_cost'] + $windows_data['azure_cost'];
+        $total_data['cost_type']        = 'Total Cost Compared';
         
         //Chart 8 data
         $primary_storage_LRS['customer_cost'] = $cost_comparison_between_customer_storage_costs_and_azure_storage_cost['primary_storage_compare_based_on_azure_LRS']['customer_storage_cost_levels'] * $currency_rate;

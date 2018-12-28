@@ -42,6 +42,7 @@
                                 $customer_setup_config = session('customer_setup_config');
                                 $current_region = $customer_setup_config['azure_locale'];
                                 $customer_currency = $customer_setup_config['currency']['currency_code'];
+                                $customer_currency_symbol = $customer_setup_config['currency']['currency_symbol'];
                             ?>
                             <!-- mobile display only -->
                             <!--
@@ -280,7 +281,7 @@
                                                         
                                                         for (i in res) {
                                                             let urlSwitch = "javascript:confirmSwitch('Currency', '{{$customer_currency}}', '" + res[i].currency_code + "')";
-                                                            result += '<a href="'+ urlSwitch +'" class="m-list-search__result-item"><span class="m-list-search__result-item-text">' + res[i].currency_code + ' - ' + res[i].currency_name + '</span></a>';
+                                                            result += '<a href="'+ urlSwitch +'" class="m-list-search__result-item"><span class="m-list-search__result-item-text">' + res[i].currency_symbol + ' - ' + res[i].currency_name + '</span></a>';
                                                         }
 
                                                         result = result + '</div>';
@@ -296,15 +297,15 @@
                                     </script>
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
                                         <span style="width:15px" class="m-nav__link-icon m--font-warning">
-                                            @if ($customer_currency == 'EUR')
+                                            {{-- @if ($customer_currency == 'EUR')
                                                 <i class="fa fa-euro-sign"></i>
-                                            @endif
-                                            @if ($customer_currency == 'USD')
+                                            @elseif ($customer_currency == 'USD')
                                                 <i class="fa fa-dollar-sign"></i>
-                                            @endif
-                                            @if ($customer_currency == 'GBP')
+                                            @elseif ($customer_currency == 'GBP')
                                                 <i class="fa fa-pound-sign"></i>
-                                            @endif
+                                            @else --}}
+                                                {{$customer_currency_symbol}}&nbsp; 
+                                            {{-- @endif --}}
                                         </span>
                                         <span class="m-nav__link-icon-wrapper m-nav__link-text m--font-warning">{{$customer_currency}}</span>
                                     </a>
@@ -325,15 +326,15 @@
                                                 <div style="margin-top:5px" class="m-list-search__results">
                                                     <span class="m-list-search__result-category m-list-search__result-category--first">Popular Currencies</span>
                                                     <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'USD');" class="m-list-search__result-item">
-                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-dollar-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-icon m--font-warning">$</span>
                                                         <span class="m-list-search__result-item-text">USD</span>
                                                     </a>
                                                     <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'EUR')" class="m-list-search__result-item">
-                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-euro-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-icon m--font-warning">€</span>
                                                         <span class="m-list-search__result-item-text">EUR</span>
                                                     </a>
                                                     <a href="javascript:confirmSwitch('Currency', '{{$customer_currency}}', 'GBP')" class="m-list-search__result-item">
-                                                        <span class="m-list-search__result-item-icon"><i class="fa fa-pound-sign m--font-warning"></i></span>
+                                                        <span class="m-list-search__result-item-icon m--font-warning">£</span>
                                                         <span class="m-list-search__result-item-text">GBP</span>
                                                     </a>
                                                 </div>

@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 use App\Valuta;
+use App\customers;
 
 class CustomerCache
-{ 
+{
     function initCustomerVariables()
     {
         $customer_case = \Auth::user()->guid;
@@ -22,75 +23,80 @@ class CustomerCache
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $json_result = curl_exec($ch);
-            curl_close($ch); 
+            curl_close($ch);
             
             //Decode JSON response:
             $result = json_decode($json_result, true); //dd($result);
-
             if($result != null  && isset($result['answers']))
             {
-                $cost_field = array(
-                    'INFRA_NETWORK_COSTS',
-                    'INFRA_RELATED_COSTS',
-                    'INFRA_BACKUP_COSTS',
-                    'INFRA_POWER_COSTS',
-                    'INTRA_FTE_COSTS',
-                    'INFRA_PRIMARY_STORAGE_COSTS',
-                    'INFRA_AUX_BACKUP_COSTS',
-                    'GEN_INFRA_TOTAL_COSTS',
-                    'GEN_INFRA_SPECIFIC_MO_VM_COSTS',
-                    'GEN_INFRA_HEAVY_BATCH_COSTS',
-                    'GEN_INFRA_SPECIFIC_HP_VM_COSTS',
-                    'GEN_INFRA_SPECIFIC_GPU_VM_COSTS',
-                    'GEN_INFRA_TOTAL_COSTS_WINDOWS_LICENSES',
-                    'GEN_INFRA_TOTAL_COSTS_LINUX_LICENSES',
-                    'GEN_INFRA_HYPERVISOR_LICENSE_COSTS',
-                    'GEN_INFRA_TOTAL_COSTS_SQL_LICENSES',
-                    'GEN_INFRA_RDS_SERVER_COSTS',
-                    'GEN_INFRA_CITRIX_SERVER_COSTS',
-                    'SLA_DISASTER_RECOVERY_COSTS_PER_VM',
-                    'CONTRACT_COSTS_LABEL'
-                );
+                // $cost_field = array(
+                //     'INFRA_NETWORK_COSTS',
+                //     'INFRA_RELATED_COSTS',
+                //     'INFRA_BACKUP_COSTS',
+                //     'INFRA_POWER_COSTS',
+                //     'INTRA_FTE_COSTS',
+                //     'INFRA_PRIMARY_STORAGE_COSTS',
+                //     'INFRA_AUX_BACKUP_COSTS',
+                //     'GEN_INFRA_TOTAL_COSTS',
+                //     'GEN_INFRA_SPECIFIC_MO_VM_COSTS',
+                //     'GEN_INFRA_HEAVY_BATCH_COSTS',
+                //     'GEN_INFRA_SPECIFIC_HP_VM_COSTS',
+                //     'GEN_INFRA_SPECIFIC_GPU_VM_COSTS',
+                //     'GEN_INFRA_TOTAL_COSTS_WINDOWS_LICENSES',
+                //     'GEN_INFRA_TOTAL_COSTS_LINUX_LICENSES',
+                //     'GEN_INFRA_HYPERVISOR_LICENSE_COSTS',
+                //     'GEN_INFRA_TOTAL_COSTS_SQL_LICENSES',
+                //     'GEN_INFRA_RDS_SERVER_COSTS',
+                //     'GEN_INFRA_CITRIX_SERVER_COSTS',
+                //     'SLA_DISASTER_RECOVERY_COSTS_PER_VM',
+                //     'CONTRACT_COSTS_LABEL'
+                // );
     
-                $customer_currency_code = '';
-                $currency_rate = 1;
+                // $customer_currency_code = '';
+                // $currency_rate = 1;
     
-                foreach ($result['answers'] as $temp){
-                    if ($temp['uid'] == 'CUSTOMER_CURRENCY')
-                    {
-                        $customer_currency_code = $temp['answer'];
-                        break;
-                    }
-                }
+                // foreach ($result['answers'] as $temp){
+                //     if ($temp['uid'] == 'CUSTOMER_CURRENCY')
+                //     {
+                //         $customer_currency_code = $temp['answer'];
+                //         break;
+                //     }
+                // }
     
-                $valuta_model = new Valuta();
-                if ($customer_currency_code != 'USD')
-                    $currency_rate = $valuta_model->changeCurrentRate($customer_currency_code);
+                // $valuta_model = new Valuta();
+                // if ($customer_currency_code != 'USD'){
+                //     $currency = $valuta_model->changeCurrentRate($customer_currency_code);
+                //     $currency_rate = $currency->rate;
+                // }
                 
-                $survey_info = array();
-                $survey_info['case_id'] = $customer_case;
-                foreach($result['answers'] as $item)
-                {
-                    $survey_info[$item['uid']] = new \stdClass();
-                    $survey_info[$item['uid']]->id              = $item['id'];
+                // $survey_info = array();
+                // $survey_info['case_id'] = $customer_case;
+                // foreach($result['answers'] as $item)
+                // {
+                //     $survey_info[$item['uid']] = new \stdClass();
+                //     $survey_info[$item['uid']]->id              = $item['id'];
 
-                    $survey_info[$item['uid']]->section_uid     = $item['section_uid'];
-                    $survey_info[$item['uid']]->section_title   = $item['section_title'];
+                //     $survey_info[$item['uid']]->section_uid     = $item['section_uid'];
+                //     $survey_info[$item['uid']]->section_title   = $item['section_title'];
 
-                    $survey_info[$item['uid']]->uid             = $item['uid'];
-                    $survey_info[$item['uid']]->title           = $item['title'];
+                //     $survey_info[$item['uid']]->uid             = $item['uid'];
+                //     $survey_info[$item['uid']]->title           = $item['title'];
                     
-                    //convert all primary cost in survey to USD
-                    if(in_array($item['uid'], $cost_field) && $item['answer']!=null)
-                        $survey_info[$item['uid']]->answer      = $item['answer']/$currency_rate;
-                    else
-                        $survey_info[$item['uid']]->answer          = $item['answer'];
+                //     //convert all primary cost in survey to USD
+                //     if(in_array($item['uid'], $cost_field) && $item['answer']!=null)
+                //         $survey_info[$item['uid']]->answer      = $item['answer']/$currency_rate;
+                //     else
+                //         $survey_info[$item['uid']]->answer          = $item['answer'];
 
-                    $survey_info[$item['uid']]->remarks         = $item['remarks'];
-                    $survey_info[$item['uid']]->cpu_name        = (isset($item['cpu_name']))?$item['cpu_name']:null;
-                    $survey_info[$item['uid']]->cpu_rating      = (isset($item['cpu_rating']))?$item['cpu_rating']:null;
-                    $survey_info[$item['uid']]->cpu_released    = (isset($item['cpu_released']))?$item['cpu_released']:null;
-                }
+                //     $survey_info[$item['uid']]->remarks         = $item['remarks'];
+                //     $survey_info[$item['uid']]->cpu_name        = (isset($item['cpu_name']))?$item['cpu_name']:null;
+                //     $survey_info[$item['uid']]->cpu_rating      = (isset($item['cpu_rating']))?$item['cpu_rating']:null;
+                //     $survey_info[$item['uid']]->cpu_released    = (isset($item['cpu_released']))?$item['cpu_released']:null;
+                // }
+                
+                $customers_model = new customers();
+                $survey_info = $customers_model->adjustQuestionaireData($result, $customer_case);
+                
                 \Cache::put('survey-info_'.$customer_case, $survey_info, 30);
             }
             else{
@@ -216,5 +222,22 @@ class CustomerCache
         \Cache::forget('dwa_scenario_microsoft_support_program_'.$customer_case);
         \Cache::forget('Windows_view_vm_categories_'.$customer_case);
         \Cache::forget('Linux_view_vm_categories_'.$customer_case);
+    }
+
+    public function refreshToken($refreshToken){
+        $postData = array(
+            "grant_type" => "refresh_token",
+            //"client_id" => $clientID,
+            //"client_secret" => $clientSecret,
+            "refresh_token" => $refreshToken
+        );
+
+        $ch = curl_init(config('app.api_url').'/api/questionnaire/'.$guid);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $r = json_decode($response);
+        echo $r->access_token; exit;
     }
 }

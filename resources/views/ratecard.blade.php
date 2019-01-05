@@ -204,6 +204,7 @@ var DatatableRemoteAjax = function() {
 
     $('#m_form_category').on('change', function() {
       datatable.search($(this).val(), 'MeterCategory');
+      getSubCateByCate($(this).val());
     });
 
     $('#m_form_subcategory').on('change', function() {
@@ -214,7 +215,22 @@ var DatatableRemoteAjax = function() {
       datatable.search($(this).val(), 'MeterName');
     });
 
-    $('#m_form_region, #m_form_category, #m_form_subcategory, #m_form_name').selectpicker();
+    // $('#m_form_region, #m_form_category, #m_form_subcategory, #m_form_name').selectpicker();
+
+    function getSubCateByCate(category){
+      $.ajax({
+        url: "rates_subcate?cate="+category+"&_token={{ csrf_token() }}",
+        complete: function( response ) {
+          var data = JSON.parse(response.responseText);
+          var subcates = '<option value="">All</option>';
+          $.each(data.results, function( index, value ) {
+            subcates += '<option value="'+value['MeterSubCategory']+'">'+value['MeterSubCategory']+'</option>';
+          });
+          $('#m_form_subcategory').html(subcates);
+          // $('#m_form_subcategory').selectpicker('refresh');
+        }
+      });
+    }
 
   };
 
@@ -229,4 +245,9 @@ jQuery(document).ready(function() {
   DatatableRemoteAjax.init();
 });
 </script>
+<style type="text/css">
+  select.m-bootstrap-select{
+    opacity: 1 !important;
+  }
+</style>
 @stop

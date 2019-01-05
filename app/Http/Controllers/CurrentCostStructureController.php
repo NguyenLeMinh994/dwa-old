@@ -36,23 +36,25 @@ class CurrentCostStructureController extends Controller
         $this->currency_rate = $customer_setup_config['currency']['currency_rate'];
         $this->currency_code = $customer_setup_config['currency']['currency_code'];
         
-        $survey_info    = $this->survey_info;
-        $region         = $this->region;
-        $currency_code  = $this->currency_code;
-        $currency_rate  = $this->currency_rate;
+        $survey_info      = $this->survey_info;
+        $region           = $this->region;
+        $currency_code    = $this->currency_code;
+        $currency_symbol  = $customer_setup_config['currency']['currency_symbol'];
+        $currency_rate    = $this->currency_rate;
+        $customer_case_id = $this->survey_info['case_id'];
         
         $modelCurrentCostStructure          = new CurrentCostStructure($survey_info);
         $summaryOfTheInputs                 = $modelCurrentCostStructure->SummaryOfTheInputs($survey_info, null);
         //$compute_original_input_ratio = $modelCurrentCostStructure->ComputeOriginalInputRatio($survey_info);
-        
+         
         //get values from Calculation Part
         $dwaCalculation                     = new DashboardCalculation();
         //$memory_optimized_vms = $dwaCalculation->Calculation_Memory_Optimized_VMs($survey_info);
-        $memory_optimized_correction_vms = $dwaCalculation->Calculation_Correction_Mem_Optimised($survey_info);
+        $memory_optimized_correction_vms    = $dwaCalculation->Calculation_Correction_Mem_Optimised($survey_info);
         $calculation_total_over_aged        = $dwaCalculation->Calculation_Total_Over_Aged($survey_info);
         $premise_costs                      = $dwaCalculation->Premise_Costs($survey_info, null);
         $customer_windows_vs_linux_split    = $dwaCalculation->Customer_Windows_vs_Linux_Split($survey_info);
-        
+        //dd($customer_windows_vs_linux_split);
         //chart 11 data
         $chart11 = array();
         $chart11[] = array('customer_cost'=>"General Purpose VMs", 'value'=>$memory_optimized_correction_vms['percentage_compute']['GP'], 'color'=>'#67b6dc');
@@ -64,7 +66,7 @@ class CurrentCostStructureController extends Controller
 
         //chart 7 data
         $chart7 = array();
-        $chart7[0]['categories'] = "Customer Cost Structure";
+        $chart7[0]['categories']                        = "Customer Cost Structure";
         $chart7[0]['network']                           = $costComparison['network']['customer_cost_structure']*100;
         $chart7[0]['co-location']                       = $costComparison['co_location']['customer_cost_structure']*100;
         $chart7[0]['total_all-in_FTE_costs_per_month']  = $costComparison['total_all_in_FTE_costs_per_month']['customer_cost_structure']*100;
@@ -202,7 +204,9 @@ class CurrentCostStructureController extends Controller
         //return to view
         return view("current-cost-structure", compact([
                                                 'survey_info',
+                                                'customer_case_id',
                                                 'currency_code',
+                                                'currency_symbol',
                                                 'currency_rate',
                                                 'region',
                                                 'summaryOfTheInputs',
@@ -216,5 +220,51 @@ class CurrentCostStructureController extends Controller
                                                 'json_comparison_data',
                                                 'json_Dv3_data',
                                                 'json_Ev3_data']));
+    }
+
+    public function updateStateOfCurrentInfrastructure(Request $request)
+    {
+        $customer_case = \Auth::user()->guid;
+        $this->survey_info = \Cache::get('survey-info_'.$customer_case);
+        
+        $customer_setup_config = session('customer_setup_config');
+        $this->region = $customer_setup_config['azure_locale'];
+
+        $params_request = $request->all();
+        $uid = $params_request['uid'];
+        
+        $percentage_fully_depreciated_vm_cost = $params_request['percentage_fully_depreciated_vm_cost'];
+       echo $percentage_fully_depreciated_vm_cost; exit;
+        // if($uid == $this->survey_info['case_id']){
+        //     $update_st = dwa_pricing_variables_input::where(['pricing_variables' => 'number_of_vms_covered_with_ASR', 'uid' => $uid])
+        //                                             ->update(['adjusted_value' => ($vm_covered_with_asr_number)]);
+        // }
+
+        // //clear old cache value
+        // $CustomerCache = new CustomerCache();
+        // $CustomerCache->refreshCacheData($this->survey_info, 'dwa_pricing_variables_input');
+        // $CustomerCache->refreshCacheData($this->survey_info, 'virtual_machine_for_compute');
+
+        // //reload chart Data
+        // $dwaCalculation = new DashboardCalculation();
+        // $cost_price_of_customer_required_infrastructure                                     = $dwaCalculation->Cost_Price_of_Customer_Required_Infrastructure($this->survey_info, $this->region);
+        // $cost_comparison_between_customer_storage_costs_and_azure_storage_cost              = $dwaCalculation->Cost_Comparison_Between_Customer_Storage_Costs_and_Azure_Storage_Cost($this->survey_info);
+        // $comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost    = $dwaCalculation->Comparison_Customer_Overall_Infrastructure_Costs_And_Azure_Infrastructure_Of_This_Capacity_Cost($this->survey_info, $this->region);
+
+        // $calculations_data = array();
+        // $calculations_data['cost_price_of_customer_required_infrastructure'] = $cost_price_of_customer_required_infrastructure;
+        // $calculations_data['cost_comparison_between_customer_storage_costs_and_azure_storage_cost'] = $cost_comparison_between_customer_storage_costs_and_azure_storage_cost;
+        // $calculations_data['comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost'] = $comparison_customer_infrastructure_costs_and_azure_infrastructure_capacity_cost;
+
+        // $chartData = $this->updateChartData($calculations_data);
+        
+        // $azureCalculation = new AzureCostComparison();
+        // $partner_margin_for_end_customer    = $azureCalculation->Partner_Margin_For_End_Customer($this->survey_info, $this->region);
+        
+        // return response()->json(array(
+        //     'update_st' => $update_st,
+        //     'chartData' => $chartData,
+        //     'partner_margin_for_end_customer' => $partner_margin_for_end_customer
+        // ));
     }
 }

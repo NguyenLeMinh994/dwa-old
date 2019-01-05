@@ -118,9 +118,38 @@ class CustomersController extends Controller
         }
 
         $valuta_model = new Valuta();
-        if ($customer_currency_code != 'USD')
-            $customer_currency_rate = $valuta_model->changeCurrentRate($customer_currency_code);
-        
+        if ($customer_currency_code != 'USD'){
+            $currency = $valuta_model->changeCurrentRate($customer_currency_code);
+            $customer_currency_rate = $currency->rate;
+        }
         return view("survey-results", compact(['questionaires', 'sections', 'customer_currency_code', 'customer_currency_rate']));
+    }
+
+    public function reOpenCase()
+    {
+        $guid = \Auth::user()->guid;
+
+        $customer_setup_config = session('customer_setup_config');
+        $token = $customer_setup_config['token'];
+
+        $authorization = "Authorization: Bearer ".$token;
+        $ch = curl_init(config('app.api_url').'/api/questionnaire/'.$guid.'/reopen');
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $json_result = curl_exec($ch);
+        $result = json_decode($json_result, true);
+        
+        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch); // Don't forget to close the connection
+
+        return response()->json(array(
+            'result' => $result,
+            'status' => $status_code
+        ));
     }
 }

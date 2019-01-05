@@ -21,7 +21,6 @@ Azure Quality of Services
                                 <th style="text-align:center">{{$quality_of_services['azure']['quality_of_services_aspects']}}</th>
                             </tr>
                         </thead>
-                        
                         <tbody>
                             <tr>
                                 <td><strong>Service Level Agreement</strong></td>

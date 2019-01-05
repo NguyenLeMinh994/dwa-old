@@ -288,9 +288,13 @@ class AzureCostComparison extends Model
     {
         $variables_pricing_input = $this->Input_Of_Pricing_Variables($survey_info);
 
-        $specified_outbound_traffic_in_terms_of_TB_month = $survey_info['INFRA_OUTBOUND_DATA_NUMBER']->answer;
-        $custom_price_per_TB_month = $variables_pricing_input['adjust_custom_price']->adjusted_value; //above 500TB/month in USD
-        $extra_cost_for_outbound_traffic = $custom_price_per_TB_month>0?$specified_outbound_traffic_in_terms_of_TB_month * 1000 * $custom_price_per_TB_month:$specified_outbound_traffic_in_terms_of_TB_month * 1000 * 0.083;
+        $specified_outbound_traffic_in_terms_of_TB_month    = $survey_info['INFRA_OUTBOUND_DATA_NUMBER']->answer;
+        $custom_price_per_TB_month                          = $variables_pricing_input['adjust_custom_price']->adjusted_value; //above 500TB/month in USD
+        
+        if($custom_price_per_TB_month > 0)
+            $extra_cost_for_outbound_traffic = $specified_outbound_traffic_in_terms_of_TB_month * 1000 * $custom_price_per_TB_month;
+        else 
+            $extra_cost_for_outbound_traffic = $specified_outbound_traffic_in_terms_of_TB_month * 1000 * 0.083; // refer Excel fomular
         
         //return
         $adjusting_azure_outbound_traffic_cost = array();

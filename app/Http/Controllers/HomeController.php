@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Valuta;
+use App\customers;
 
 class HomeController extends Controller
 {
@@ -91,8 +92,15 @@ class HomeController extends Controller
                     $customer_config['customerName']        = $survey_info['CUSTOMER_NAME']->answer;
                     
 					$customer_config['currency']['currency_code'] = trim($survey_info['CUSTOMER_CURRENCY']->answer);
+                    
                     $valuta = new Valuta();
-                    $customer_config['currency']['currency_rate'] = $valuta->changeCurrentRate($survey_info['CUSTOMER_CURRENCY']->answer);
+                    $currency = $valuta->changeCurrentRate($survey_info['CUSTOMER_CURRENCY']->answer);
+                    $customer_config['currency']['currency_rate'] = $currency->rate;
+
+                    if($currency->currency_symbol != null && $currency->currency_symbol != '')
+                        $customer_config['currency']['currency_symbol'] = $currency->currency_symbol;
+                    else
+                        $customer_config['currency']['currency_symbol'] = $currency->currency_code;
                     
                     //$customer_config['currency']['currency_code'] = "USD";
                     //$customer_config['currency']['currency_rate'] = 1;
@@ -143,69 +151,73 @@ class HomeController extends Controller
 
         if($result != null && isset($result['answers']))
         {
-            $cost_field = array(
-                'INFRA_NETWORK_COSTS',
-                'INFRA_RELATED_COSTS',
-                'INFRA_BACKUP_COSTS',
-                'INFRA_POWER_COSTS',
-                'INTRA_FTE_COSTS',
-                'INFRA_PRIMARY_STORAGE_COSTS',
-                'INFRA_AUX_BACKUP_COSTS',
-                'GEN_INFRA_TOTAL_COSTS',
-                'GEN_INFRA_SPECIFIC_MO_VM_COSTS',
-                'GEN_INFRA_HEAVY_BATCH_COSTS',
-                'GEN_INFRA_SPECIFIC_HP_VM_COSTS',
-                'GEN_INFRA_SPECIFIC_GPU_VM_COSTS',
-                'GEN_INFRA_TOTAL_COSTS_WINDOWS_LICENSES',
-                'GEN_INFRA_TOTAL_COSTS_LINUX_LICENSES',
-                'GEN_INFRA_HYPERVISOR_LICENSE_COSTS',
-                'GEN_INFRA_TOTAL_COSTS_SQL_LICENSES',
-                'GEN_INFRA_RDS_SERVER_COSTS',
-                'GEN_INFRA_CITRIX_SERVER_COSTS',
-                'SLA_DISASTER_RECOVERY_COSTS_PER_VM',
-                'CONTRACT_COSTS_LABEL'
-            );
+            // $cost_field = array(
+            //     'INFRA_NETWORK_COSTS',
+            //     'INFRA_RELATED_COSTS',
+            //     'INFRA_BACKUP_COSTS',
+            //     'INFRA_POWER_COSTS',
+            //     'INTRA_FTE_COSTS',
+            //     'INFRA_PRIMARY_STORAGE_COSTS',
+            //     'INFRA_AUX_BACKUP_COSTS',
+            //     'GEN_INFRA_TOTAL_COSTS',
+            //     'GEN_INFRA_SPECIFIC_MO_VM_COSTS',
+            //     'GEN_INFRA_HEAVY_BATCH_COSTS',
+            //     'GEN_INFRA_SPECIFIC_HP_VM_COSTS',
+            //     'GEN_INFRA_SPECIFIC_GPU_VM_COSTS',
+            //     'GEN_INFRA_TOTAL_COSTS_WINDOWS_LICENSES',
+            //     'GEN_INFRA_TOTAL_COSTS_LINUX_LICENSES',
+            //     'GEN_INFRA_HYPERVISOR_LICENSE_COSTS',
+            //     'GEN_INFRA_TOTAL_COSTS_SQL_LICENSES',
+            //     'GEN_INFRA_RDS_SERVER_COSTS',
+            //     'GEN_INFRA_CITRIX_SERVER_COSTS',
+            //     'SLA_DISASTER_RECOVERY_COSTS_PER_VM',
+            //     'CONTRACT_COSTS_LABEL'
+            // );
 
-            $customer_currency = '';
-            $currency_rate = 1;
+            // $customer_currency = '';
+            // $currency_rate = 1;
 
-            foreach ($result['answers'] as $temp){
-                if ($temp['uid'] == 'CUSTOMER_CURRENCY')
-                {
-                    $customer_currency = $temp['answer'];
-                    break;
-                }
-            }
+            // foreach ($result['answers'] as $temp){
+            //     if ($temp['uid'] == 'CUSTOMER_CURRENCY')
+            //     {
+            //         $customer_currency = $temp['answer'];
+            //         break;
+            //     }
+            // }
 
-            $valuta_model = new Valuta();
-            if ($customer_currency != 'USD')
-                $currency_rate = $valuta_model->changeCurrentRate($customer_currency);
+            // $valuta_model = new Valuta();
+            // if ($customer_currency != 'USD'){
+            //     $currency = $valuta_model->changeCurrentRate($customer_currency);
+            //     $currency_rate = $currency->rate;
+            // }
             
-            
-            $survey_info = array();
-            $survey_info['case_id'] = $guid;
-            foreach($result['answers'] as $item)
-            {
-                $survey_info[$item['uid']] = new \stdClass();
-                $survey_info[$item['uid']]->id              = $item['id'];
+            // $survey_info = array();
+            // $survey_info['case_id'] = $guid;
+            // foreach($result['answers'] as $item)
+            // {
+            //     $survey_info[$item['uid']] = new \stdClass();
+            //     $survey_info[$item['uid']]->id              = $item['id'];
     
-                $survey_info[$item['uid']]->section_uid     = $item['section_uid'];
-                $survey_info[$item['uid']]->section_title   = $item['section_title'];
+            //     $survey_info[$item['uid']]->section_uid     = $item['section_uid'];
+            //     $survey_info[$item['uid']]->section_title   = $item['section_title'];
     
-                $survey_info[$item['uid']]->uid             = $item['uid'];
-                $survey_info[$item['uid']]->title           = $item['title'];
-                //convert all primary cost in survey to USD
-                if(in_array($item['uid'], $cost_field) && $item['answer']!=null)
-                    $survey_info[$item['uid']]->answer      = $item['answer']/$currency_rate;
-                else
-                    $survey_info[$item['uid']]->answer      = $item['answer'];
+            //     $survey_info[$item['uid']]->uid             = $item['uid'];
+            //     $survey_info[$item['uid']]->title           = $item['title'];
+            //     //convert all primary cost in survey to USD
+            //     if(in_array($item['uid'], $cost_field) && $item['answer']!=null)
+            //         $survey_info[$item['uid']]->answer      = $item['answer']/$currency_rate;
+            //     else
+            //         $survey_info[$item['uid']]->answer      = $item['answer'];
                 
-                    $survey_info[$item['uid']]->remarks         = $item['remarks'];
-                $survey_info[$item['uid']]->cpu_name        = (isset($item['cpu_name']))?$item['cpu_name']:null;
-                $survey_info[$item['uid']]->cpu_rating      = (isset($item['cpu_rating']))?$item['cpu_rating']:null;
-                $survey_info[$item['uid']]->cpu_released    = (isset($item['cpu_released']))?$item['cpu_released']:null;
-            }
+            //     $survey_info[$item['uid']]->remarks         = $item['remarks'];
+            //     $survey_info[$item['uid']]->cpu_name        = (isset($item['cpu_name']))?$item['cpu_name']:null;
+            //     $survey_info[$item['uid']]->cpu_rating      = (isset($item['cpu_rating']))?$item['cpu_rating']:null;
+            //     $survey_info[$item['uid']]->cpu_released    = (isset($item['cpu_released']))?$item['cpu_released']:null;
+            // }
     
+            $customers_model = new customers();
+            $survey_info = $customers_model->adjustQuestionaireData($result, $guid);
+
             //create survey cache
             \Cache::put('survey-info_'.$guid, $survey_info, 30);
             return $survey_info;

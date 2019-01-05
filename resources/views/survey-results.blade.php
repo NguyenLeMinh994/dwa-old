@@ -22,15 +22,40 @@ Questionnaire
             let body = 'Dear customer,%0D%0A';
             body += 'I have re-opened the Questionnaire for this case, kindly use the same login credentials to update the questionnaire. Please focus on the following questions:';
             body += '%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A';
-            body += 'Kind regards,%0D%0A'+caseHandlerName;
+            body += 'Kind regards,%0D%0A' + caseHandlerName;
             
             function confirmSendMail(){
                 $("#output_modal").modal('show');
             }
 
-            function sendMail(){
-                window.location.href = 'mailto:'+mailTo+'?subject='+subjectText+'&cc='+cc+'&body='+body;
-                $("#output_modal").modal('hide');
+            // function sendMail(){
+            //     reOpenCase();
+            //     //window.location.href = 'mailto:'+mailTo+'?subject='+subjectText+'&cc='+cc+'&body='+body;
+            //     //$("#output_modal").modal('hide');
+            // }
+
+            function reOpenCase(){
+                $.ajax({
+                    type: 'POST',
+                    url: "customers/reopen",
+                    data: {
+                        '_token' : '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        //console.log(data);
+                        if(data.status == 200){
+                            window.location.href = 'mailto:'+mailTo+'?subject='+subjectText+'&cc='+cc+'&body='+body;
+                            $("#output_modal").modal('hide');
+                        }
+                        else{
+                            $("#output_modal").modal('hide');
+                            if(typeof data.result.errors[0] != "undefined")
+                                alert(data.result.errors[0].message);
+                            else
+                                alert('Looks like something went wrong. Case cannot reopen.');
+                        }
+                    }
+                });
             }
         </script>
         <div class="modal fade" id="output_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -48,7 +73,7 @@ Questionnaire
                         <input type="hidden" id="documentType" value="">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" onclick="sendMail()">Continue</button>
+                        <button type="button" class="btn btn-info" onclick="reOpenCase()">Continue</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>

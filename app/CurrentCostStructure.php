@@ -28,12 +28,12 @@ class CurrentCostStructure extends Model
                                 + (float)$survey_info['INFRA_BACKUP_COSTS']->answer
                                 + (float)$survey_info['INFRA_POWER_COSTS']->answer
                                 + (float)$survey_info['INTRA_FTE_COSTS']->answer;
-        $total_indirect_cost = $total_indirect_cost;
+        $total_indirect_cost = 100000;//$total_indirect_cost;
 
         // ID 13 + 16
         $total_storage_cost = (float)$survey_info['INFRA_PRIMARY_STORAGE_COSTS']->answer 
                                 + (float)$survey_info['INFRA_AUX_BACKUP_COSTS']->answer;
-        $total_storage_cost = $total_storage_cost;
+        $total_storage_cost = 100000;//$total_storage_cost;
 
         // ID (28+43+52+63+70) 
         $total_compute_cost = (float)$survey_info['GEN_INFRA_TOTAL_COSTS']->answer 
@@ -66,7 +66,7 @@ class CurrentCostStructure extends Model
 
         $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION = 1;
         if((float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer > 0)
-            $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION = (float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer;
+            $GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION = 100000;//(float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU_PRODUCTION']->answer;
 
         $GEN_INFRA_NUMBER_LOGICAL_CPU = 1;
         if((float)$survey_info['GEN_INFRA_NUMBER_LOGICAL_CPU']->answer > 0)
@@ -85,12 +85,13 @@ class CurrentCostStructure extends Model
         $summary_of_the_inputs['total_storage_cost']        = $total_storage_cost;
         $summary_of_the_inputs['total_compute_cost']        = $total_compute_cost;
         $summary_of_the_inputs['total_os_lisence_cost']     = $total_os_lisence_cost;
-        $summary_of_the_inputs['num_of_reported_vms']       = $num_of_reported_vms;
         $summary_of_the_inputs['num_of_cpus_in_use']        = $num_of_cpus_in_use;
+        $summary_of_the_inputs['num_of_reported_vms']       = $num_of_reported_vms;
         $summary_of_the_inputs['total_of_gb_in_use']        = $total_of_gb_in_use;
         $summary_of_the_inputs['ratio_over_committed_cpu']  = $ratio_over_committed_cpu;
         $summary_of_the_inputs['number_of_gbram_per_vm']    =  $number_of_gbram_per_vm;
         $summary_of_the_inputs['ratio_cpu_gbram']           = $ratio_cpu_gbram;
+        
         
         return $summary_of_the_inputs;
     }
@@ -117,5 +118,20 @@ class CurrentCostStructure extends Model
             $compute_original_input_ratio['percentage_of_vms_in_dr']    = 0;
 
         return $compute_original_input_ratio;
+    }
+
+    public function CurrentProcessors($survey_info)
+    {
+        $currentProcessors = array();
+        $currentProcessors[$survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_name] = date('M Y', strtotime($survey_info['GEN_INFRA_CPU_1_SPEC']->cpu_released));
+
+        if(isset($survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_name)){
+            $currentProcessors[$survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_name] = date('M Y', strtotime($survey_info['GEN_INFRA_CPU_2_SPEC']->cpu_released));
+        }
+        if(isset($survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_name)){
+            $currentProcessors[$survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_name] = date('M Y', strtotime($survey_info['GEN_INFRA_CPU_3_SPEC']->cpu_released));
+        }
+
+        return $currentProcessors;
     }
 }

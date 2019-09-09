@@ -110,6 +110,7 @@ Route::group(['middleware' => 'localization', 'prefix' => Session::get('locale')
 
         //CPU Bench mark
         Route::get('cpu-benchmarks','CPUBenchmarksController@index');
+        
     //});
 });
 

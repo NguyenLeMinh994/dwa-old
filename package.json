@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "guzzle": "0.0.3",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "vue": "^2.5.17",
     "vue-autosuggest": "^1.5.0",
     "vue-router": "^3.0.1"
